@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.FragmentOne">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/hello_blank_fragment"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="0dp" />
+
+
+    <LinearLayout
+
+        android:id="@+id/first_linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintWidth_percent="0.5"
+        >
+
+        <ImageView
+            android:layout_margin="5dp"
+            android:id="@+id/image_recyclable_garbage"
+            android:layout_width="147dp"
+            android:layout_height="200dp"
+            android:src="@drawable/image_recyclable_garbage" />
+
+        <ImageView
+            android:layout_margin="5dp"
+            android:id="@+id/image_wet_garbage"
+            android:layout_width="147dp"
+            android:layout_height="200dp"
+            android:src="@drawable/image_wet_garbage" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/second_linearLayout"
+        app:layout_constraintTop_toBottomOf="@id/first_linearLayout"
+        app:layout_constraintStart_toStartOf="@id/first_linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintWidth_percent="0.5">
+        <ImageView
+            android:layout_margin="5dp"
+            android:id="@+id/image_other_garbage"
+            android:layout_width="147dp"
+            android:layout_height="200dp"
+            android:src="@drawable/image_other_garbage"
+             />
+
+        <ImageView
+            android:layout_margin="5dp"
+            android:id="@+id/image_harmful_garbage"
+            android:layout_width="147dp"
+            android:layout_height="200dp"
+            android:src="@drawable/image_harmful_garbage"
+             />
+    </LinearLayout>
+    <TextView
+        android:textColor="@color/teal_700"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="6dp"
+        android:textSize="16sp"
+        android:id="@+id/name_of_garbage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name_of_all_garbage"
+        app:layout_constraintStart_toStartOf="@id/first_linearLayout"
+        app:layout_constraintBottom_toTopOf="@id/first_linearLayout"
+        />
+    <TextView
+        android:layout_marginStart="6dp"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/teal_700"
+        android:id="@+id/tips"
+        android:text="@string/tips"
+        app:layout_constraintTop_toBottomOf="@id/second_linearLayout"
+        app:layout_constraintStart_toStartOf="@id/second_linearLayout"
+        />
+
+    <TextView
+        android:id="@+id/tip_discribe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:lineSpacingExtra="1.5dp"
+        android:text="@string/tips_text"
+        app:layout_constraintEnd_toEndOf="@+id/second_linearLayout"
+        app:layout_constraintStart_toStartOf="@id/second_linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/tips" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

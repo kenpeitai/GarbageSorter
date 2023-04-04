@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.GarbageSorter" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+    <style name="MyBottomNavigationView" parent="Widget.Design.BottomNavigationView">
+        <item name="android:background">@drawable/bottom_nav_bg</item>
+        <item name="android:theme">@style/MyBottomNavigationTheme</item>
+    </style>
+
+    <style name="MyBottomNavigationTheme">
+        <item name="colorPrimary">@android:color/white</item>
+    </style>
+
+</resources>
