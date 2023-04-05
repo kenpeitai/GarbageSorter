@@ -1,22 +1,20 @@
+buildscript{
+    dependencies{
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
+    }
 
+}
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
-
     id 'kotlin-android'
 
-
-
-
 }
-
 
 android {
     namespace 'com.cqupt.garbagesorter'
     compileSdk 33
-
-
 
     defaultConfig {
         applicationId "com.cqupt.garbagesorter"
@@ -60,16 +58,16 @@ android {
     ndkVersion '23.1.7779620'
 }
 
-allprojects {
-    repositories {
-
-      //  mavenCentral()
-       // maven { url 'https://jitpack.io' }
-    }
+ext {
+    kotlinVersion = '1.8.10'
 }
 dependencies {
-//    compile 'com.github.jitpack:android-example:1.0.4'
+    def lifecycle_version = "2.5.1"
+    def arch_version = "2.1.0"
 
+
+//    compile 'com.github.jitpack:android-example:1.0.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
@@ -77,9 +75,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
     implementation 'androidx.core:core-ktx:1.9.0'
-
     implementation 'org.bytedeco:javacpp:1.5.6'
-
     kapt "androidx.room:room-compiler:2.5.1"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -88,9 +84,24 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.5.1'
     annotationProcessor 'androidx.room:room-compiler:2.5.1'
     implementation 'androidx.room:room-runtime:2.5.1'
-
     implementation "androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09"
     implementation "androidx.navigation:navigation-compose:2.6.0-alpha08"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.foundation:foundation'
+    implementation 'androidx.compose.material:material'
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    // ViewModel utilities for Compose
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+
+
 
 }

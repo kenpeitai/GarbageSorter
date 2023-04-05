@@ -60,7 +60,7 @@ class WelcomeActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, 2000)
+        }, 1000)
     }
 
     private fun databaseExists(context: Context, databaseName: String): Boolean {

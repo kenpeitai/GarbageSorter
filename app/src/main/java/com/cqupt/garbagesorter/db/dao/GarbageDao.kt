@@ -13,7 +13,8 @@ interface GarbageDao {
     fun getById(id: String): Garbage?
     @Query("SELECT * FROM garbage WHERE type = :type")
     fun getByType(type: String): List<Garbage>?
-
+    @Query("SELECT * FROM garbage WHERE type = :type LIMIT 10")
+    fun getTop10ByType(type: String): List<Garbage>?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(garbage: Garbage)
 
