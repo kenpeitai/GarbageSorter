@@ -17,7 +17,8 @@ interface GarbageDao {
     fun getTop10ByType(type: String): List<Garbage>?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(garbage: Garbage)
-
+    @Query("SELECT * FROM garbage WHERE name LIKE '%' || :name || '%'")
+    fun getGarbageListByName(name: String): List<Garbage>
     @Delete
     fun delete(garbage: Garbage)
 }

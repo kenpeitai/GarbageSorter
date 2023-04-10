@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "garbage")
-data class Garbage(
+data class Garbage (
     @PrimaryKey val id: String,
     val type: String?,
     val name: String?,

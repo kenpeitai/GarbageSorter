@@ -8,13 +8,37 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/fragment1_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
+        android:layout_height="80dp"
+        android:background="@color/teal_700"
+        android:elevation="4dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:subtitleTextAppearance="@style/MyToolbarSubTitleStyle"
+        app:titleMarginTop="3dp"
+        app:titleTextColor="@color/white" />
+
+    <EditText
+        android:id="@+id/fragment_one_edit"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:paddingHorizontal="5dp"
+        android:layout_marginHorizontal="5dp"
+        android:gravity="center_vertical"
+        android:hint="@string/fragment_one_edit"
+        android:drawableStart="@drawable/baseline_search_24"
+        android:editable="false"
+        android:textSize="12sp"
+        android:layout_marginTop="-17dp"
+        android:background="#FFFFFF"
+        android:elevation="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/first_linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/first_linearLayout"
+        app:layout_constraintTop_toBottomOf="@id/fragment1_toolbar" />
 
 
     <LinearLayout
@@ -26,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintVertical_bias="0.28"
         app:layout_constraintWidth_percent="0.5"
         >
 

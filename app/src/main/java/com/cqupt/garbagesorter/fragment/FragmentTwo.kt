@@ -1,13 +1,11 @@
 package com.cqupt.garbagesorter.fragment
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.Image
@@ -16,28 +14,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.room.Room
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
-import com.google.android.material.floatingactionbutton.FloatingActionButton.Size
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -167,11 +158,13 @@ class FragmentTwo : Fragment() {
                     garbages.clear()
                     if (result != null) {
                         garbages.addAll(result)
-                        Log.d("garbages TAG----------->", "garbages size: ${garbages.size}")
+                        Log.d("garbage's TAG----------->", "garbage's size: ${garbages.size}")
                     }
                 }
             }
-            //根据数据库返回值填充列表
+
+
+                    //根据数据库返回值填充列表
             LazyColumn {
                 items(garbages.size) { index ->
                     Row(
@@ -192,7 +185,7 @@ class FragmentTwo : Fragment() {
                             requireContext().packageName
                         )
                         Image(
-                            painter = painterResource(id = drawableId),
+                            painter = painterResource(id = drawableId),           //展示一张图片
                             contentDescription = "Image of $name",
                             modifier = Modifier
                                 .height(70.dp)
@@ -207,18 +200,17 @@ class FragmentTwo : Fragment() {
                             ) {
                                 garbages[index].description?.let {
                                     Text(                                                        //描述
-                                    text = it,
-                                    style = MaterialTheme.typography.subtitle2
-                                ) }
+                                        text = it,
+                                        style = MaterialTheme.typography.subtitle2
+                                    ) }
                             }
 
                         }
-                        
+
                     }
 
                 }
             }
-
 
         }
 

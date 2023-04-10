@@ -1,14 +1,22 @@
 package com.cqupt.garbagesorter.fragment
+
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
-import androidx.compose.runtime.Composable
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.compose.ui.unit.dp
+import androidx.fragment.app.Fragment
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.DetailActivity
+import com.cqupt.garbagesorter.activity.SearchActivity
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,7 +33,7 @@ class FragmentOne : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private lateinit var toolbar: Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,11 +67,45 @@ class FragmentOne : Fragment() {
             startDetailActivity("厨余垃圾")
         }
 
+        //设置toolbar
+        toolbar = view.findViewById(R.id.fragment1_toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+        val title = " 垃圾分类指南"
+        toolbar.title = title
+        for (i in 0 until toolbar.childCount) {
+            val view = toolbar.getChildAt(i)
+            if (view is TextView) {
+                val textView = view
+                if (title == textView.text) {
+                    textView.gravity = Gravity.CENTER_HORIZONTAL
+                    textView.gravity = Gravity.TOP
+                    textView.textSize = 18.0f
+                    val params = Toolbar.LayoutParams(
+                        Toolbar.LayoutParams.WRAP_CONTENT,
+                        Toolbar.LayoutParams.WRAP_CONTENT
 
+                    )
+                    params.gravity = Gravity.CENTER_HORIZONTAL
+                    params.gravity = Gravity.TOP
 
+                    textView.layoutParams = params
+                }
+            }
+            toolbar.subtitle = "爱护环境,人人有责"
+
+        }
+
+        var editText = view.findViewById<EditText>(R.id.fragment_one_edit)
+        editText.setOnClickListener { startSearchActivity() }
 
         return view
     }
+
+    private fun startSearchActivity() {
+        val intent = Intent(activity,SearchActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun startDetailActivity(garbageType: String) {
         val intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra("garbage_type", garbageType)
