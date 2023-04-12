@@ -12,6 +12,11 @@
         android:theme="@style/Theme.GarbageSorter"
         tools:targetApi="31">
         <activity
+            android:name=".GarbageInfoActivity"
+            android:exported="false"
+            android:label="@string/title_activity_garbage_info"
+            android:theme="@style/Theme.GarbageSorter" />
+        <activity
             android:name=".activity.MainActivity2"
             android:exported="false"
             android:label="@string/title_activity_main2"

@@ -112,7 +112,7 @@ class FragmentTwo : Fragment() {
                                 contentDescription = null,
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+                                    .padding(8.dp)
                                     .offset(y = if (selectedImage == index) 8.dp else 0.dp)
                                     .clickable { selectedImage = index },
                                 contentScale = ContentScale.Crop

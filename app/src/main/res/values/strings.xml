@@ -61,4 +61,5 @@
     <string name="tips_text">鼓励将可回收物卖入废品回收系统，或交投至两网融合服务点，或投放至可回收物收集容器；严禁将有害垃圾投放到其他的生活垃圾收集容器；日常家庭生活垃圾要做到干、湿垃圾两分开。</string>
     <string name="fragment_one_edit">请输入正确内容</string>
     <string name="searchViewTitle">搜索</string>
+    <string name="title_activity_garbage_info">GarbageInfoActivity</string>
 </resources>
