@@ -11,5 +11,5 @@ data class Garbage (
     val name: String?,
     val description: String?,
     val img: String?,
-    @ColumnInfo(name = "like_index") val likeIndex: Int?
+    @ColumnInfo(name = "like_index") var likeIndex: Int?
 )

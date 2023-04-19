@@ -1,51 +1,56 @@
 package com.cqupt.garbagesorter.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.ui.theme.GarbageSorterTheme
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.cqupt.garbagesorter.db.dao.GarbageDao
+import kotlinx.coroutines.*
 
 class GarbageInfoActivity : ComponentActivity() {
+    lateinit var dao: GarbageDao
+    lateinit var appDatabase: MyDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id = intent.getStringExtra("EXTRA_GARBAGE")
         Log.d("TAG GARBAGE id-------------->", "onCreate: $id")
 
 
-        val appDatabase = Room.databaseBuilder(
+        appDatabase = Room.databaseBuilder(
             this,
             MyDatabase::class.java,
             "garbage_info_database"
         ).createFromAsset("test.db").build()
-
+        dao = appDatabase.GarbageDao()!!
         setContent {
 
             var garbage: Garbage by remember {
@@ -56,25 +61,22 @@ class GarbageInfoActivity : ComponentActivity() {
                         null,
                         null,
                         null,
-                        null
+                        0
                     )
                 )
             }
-            LaunchedEffect(garbage) {
+            LaunchedEffect(garbage,garbage.likeIndex) {
                 withContext(Dispatchers.IO) {
-                    garbage = id?.let { appDatabase.GarbageDao()?.getById(it) }!!
+                    garbage = id?.let { dao.getById(it) }!!
                 }
+
             }
+
 
             GarbageSorterTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     InitView(garbage)
-
-
                 }
             }
         }
@@ -95,18 +97,18 @@ class GarbageInfoActivity : ComponentActivity() {
 
     private @Composable
     fun SetDescription(garbage: Garbage) {
-        val textColor = when(garbage.type){
+        val textColor = when (garbage.type) {
             "可回收物" -> Color(0xFF3162A7)
             "厨余垃圾" -> Color(0xFF1C7070)
             "其他垃圾" -> Color(0xFF56686C)
             "有害垃圾" -> Color(0xFFA42B3E)
             else -> Color.DarkGray
         }
-        val tip = when(garbage.type){
-            "可回收物" -> "轻投轻放\n清洁干燥，避免污染\n废纸尽量平整\n立体包装物请清空内容物，清洁后压扁投放\n有尖锐边角的，应包裹后投放"
-            "厨余垃圾" -> "纯流质的食物垃圾，如牛奶等，应直接倒进下水口\n有包装物的湿垃圾应将包装物去除后分类投放，包装物请投放到对应的可回收物或干垃圾容器"
-            "其他垃圾" -> "尽量沥干水分\n难以辨识类别的生活垃圾投入干垃圾容器内"
-            "有害垃圾" -> "投放时请注意轻放\n易破损的请连带包装或包裹后轻放\n如易挥发，请密封后投放"
+        val tip = when (garbage.type) {
+            "可回收物" -> LocalContext.current.resources.getString(R.string.type11)
+            "厨余垃圾" -> LocalContext.current.resources.getString(R.string.type22)
+            "其他垃圾" -> LocalContext.current.resources.getString(R.string.type33)
+            "有害垃圾" -> LocalContext.current.resources.getString(R.string.type44)
             else -> ""
         }
 
@@ -120,13 +122,13 @@ class GarbageInfoActivity : ComponentActivity() {
         Text(
             text = "▋ 投放要求",
             style = MaterialTheme.typography.body1.copy(color = textColor),
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp,)
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         )
         Spacer(modifier = Modifier.heightIn(20.dp))
         Text(
             text = tip,
             style = MaterialTheme.typography.body2,
-            modifier = Modifier.padding(start = 20.dp, end = 20.dp,)
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         )
 
     }
@@ -141,12 +143,12 @@ class GarbageInfoActivity : ComponentActivity() {
             "drawable",
             LocalContext.current.packageName
         )
-        var drawableId2 = LocalContext.current.resources.getIdentifier(
+        val drawableId2 = LocalContext.current.resources.getIdentifier(
             name2,
             "drawable",
             LocalContext.current.packageName
         )
-        var drawableId3 = LocalContext.current.resources.getIdentifier(
+        val drawableId3 = LocalContext.current.resources.getIdentifier(
             name3,
             "drawable",
             LocalContext.current.packageName
@@ -158,19 +160,18 @@ class GarbageInfoActivity : ComponentActivity() {
                 contentDescription = "Image of $name1",
                 modifier = Modifier
                     .weight(1f)
-                    .padding(15.dp)
+                    .padding(vertical = 15.dp, horizontal = 5.dp)
                     .clip(
                         RoundedCornerShape(5.dp)
                     )
             )
-
 
             Image(
                 painter = painterResource(id = drawableId2),           //展示一张图片
                 contentDescription = "Image of $name1",
                 modifier = Modifier
                     .weight(1f)
-                    .padding(15.dp)
+                    .padding(vertical = 15.dp, horizontal = 5.dp)
                     .clip(
                         RoundedCornerShape(5.dp)
                     )
@@ -182,7 +183,7 @@ class GarbageInfoActivity : ComponentActivity() {
                 contentDescription = "Image of $name1",
                 modifier = Modifier
                     .weight(1f)
-                    .padding(15.dp)
+                    .padding(vertical = 15.dp, horizontal = 5.dp)
                     .clip(
                         RoundedCornerShape(5.dp)
                     )
@@ -193,24 +194,86 @@ class GarbageInfoActivity : ComponentActivity() {
 
     @Composable
     private fun SetTitleAndType(garbage: Garbage) {
-        val imageId = when(garbage.type){
+        val imageId = when (garbage.type) {
             "可回收物" -> R.drawable.kehuishouwu_xiao
             "厨余垃圾" -> R.drawable.chuyulaji_xiao
             "其他垃圾" -> R.drawable.qitalaji_xiao
             "有害垃圾" -> R.drawable.youhailaji_xiao
             else -> R.drawable.kehuishouwu_xiao
         }
-        Row() {
+        Row(modifier = Modifier.fillMaxWidth()) {
 
-            Image(painter = painterResource(id = imageId), contentDescription = "image_${garbage.type}", modifier = Modifier.size(80.dp).padding(start = 15.dp).weight(1f))
-            garbage.name?.let { Text(text = it, style = MaterialTheme.typography.subtitle1,modifier = Modifier
-                .padding(horizontal = 15.dp)
-                .weight(1f)) }
+            Image(
+                painter = painterResource(id = imageId),
+                contentDescription = "image_${garbage.type}",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(start = 15.dp)
+                    .weight(1f)
+            )
 
+            garbage.name?.let {
+
+                Text(
+                    text = it, style = MaterialTheme.typography.h6,
+                    modifier = Modifier
+
+                        .padding(horizontal = 15.dp)
+                        .weight(1f)
+                        .align(alignment = Alignment.CenterVertically),
+
+                    )
+
+
+            }
+            val coroutineScope = rememberCoroutineScope()
+            val context = LocalContext.current
+            Button(
+                onClick = {
+                    if (garbage.likeIndex == 1) {
+                        Toast.makeText(context, "收藏已存在", Toast.LENGTH_SHORT).show()
+                    } else {
+                        coroutineScope.launch {
+                            withContext(Dispatchers.IO) {
+                                dao.updateGarbageLikeIndex(garbage.id, 1)
+                                withContext(Dispatchers.Main) {
+
+                                    Toast.makeText(
+                                        context,
+                                        "收藏成功！garbage_likeindex is ${garbage.likeIndex}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                }
+                            }
+                        }
+                        garbage.likeIndex = 1
+
+                    }
+
+                },
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Column() {
+                    Icon(
+                        Icons.Default.Star,
+                        contentDescription = null,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Text(text = "添加至收藏")
+                }
+
+            }
 
         }
 
     }
+
+
+
 
 
     @Preview
@@ -227,6 +290,13 @@ class GarbageInfoActivity : ComponentActivity() {
             },
             backgroundColor = MaterialTheme.colors.secondary
         )
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        appDatabase.close()
+        finish()
+
     }
 }
 

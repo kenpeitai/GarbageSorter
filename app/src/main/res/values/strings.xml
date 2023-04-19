@@ -62,4 +62,17 @@
     <string name="fragment_one_edit">请输入正确内容</string>
     <string name="searchViewTitle">搜索</string>
     <string name="title_activity_garbage_info">GarbageInfoActivity</string>
+    <string name="type1">可回收物</string>
+    <string name="type2">厨余垃圾</string>
+    <string name="type3">其他垃圾</string>
+    <string name="type4">有害垃圾</string>
+    <string name="type11">轻投轻放\n清洁干燥，避免污染\n废纸尽量平整\n立体包装物请清空内容物，清洁后压扁投放\n有尖锐边角的，应包裹后投放</string>
+    <string name="type22">纯流质的食物垃圾，如牛奶等，应直接倒进下水口
+有包装物的湿垃圾应将包装物去除后分类投放，包装物请投放到对应的可回收物或干垃圾容器</string>
+    <string name="type33">尽量沥干水分
+难以辨识类别的生活垃圾投入干垃圾容器内</string>
+    <string name="type44">投放时请注意轻放
+易破损的请连带包装或包裹后轻放
+如易挥发，请密封后投放</string>
+
 </resources>

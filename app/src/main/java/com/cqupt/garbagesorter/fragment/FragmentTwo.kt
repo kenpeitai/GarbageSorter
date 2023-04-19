@@ -1,23 +1,27 @@
 package com.cqupt.garbagesorter.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -25,12 +29,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.cqupt.garbagesorter.R
+import com.cqupt.garbagesorter.activity.GarbageInfoActivity
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -89,12 +94,14 @@ class FragmentTwo : Fragment() {
     private fun SetList1(imageList: List<Int>) {
         var selectedImage by remember { mutableStateOf(0) }
         val garbages = remember { mutableStateListOf<Garbage>() }
-        var color :Long by remember { mutableStateOf(0) }
-
-        Column {
-            Column(
+        var color: Long by remember { mutableStateOf(0) }
+        var isCollected by remember { mutableStateOf(R.drawable.baseline_note_add_24) }
+        var isClickable by remember { mutableStateOf(true) }
+        var showProgress by remember { mutableStateOf(false) }
+        var progressVisibleTime by remember { mutableStateOf(0L) }
+        Column {                        //总页面布局
+            Column(                                               //第一列，种类选择栏
                 modifier = Modifier.height(80.dp)
-
             ) {
                 LazyRow(
                     modifier = Modifier
@@ -136,7 +143,7 @@ class FragmentTwo : Fragment() {
                 3 -> "有害垃圾"
                 else -> "可回收物"
             }
-            color = when(selectedImage) {
+            color = when (selectedImage) {
                 0 -> 0xFF3162A7
                 1 -> 0xFF1C7070
                 2 -> 0xFF56686C
@@ -152,65 +159,164 @@ class FragmentTwo : Fragment() {
                 "garbage2"
             ).createFromAsset("test.db").build()
             val dao = database.GarbageDao()
-            LaunchedEffect(garbages, itemType) {  //可观察的可变对象全部放进去
+            LaunchedEffect(garbages, itemType) {  //传入的对象改变时执行语句
                 withContext(Dispatchers.IO) {
                     val result = dao?.getByType(itemType)
                     garbages.clear()
+
                     if (result != null) {
                         garbages.addAll(result)
+
                         Log.d("garbage's TAG----------->", "garbage's size: ${garbages.size}")
+
                     }
                 }
             }
 
+            Box() {
+                LazyColumn(modifier = Modifier.scrollable(rememberScrollState(),enabled = isClickable,orientation = Orientation.Vertical)) {    //第2列，具体物品
+                    items(garbages.size) { index ->
 
-                    //根据数据库返回值填充列表
-            LazyColumn {
-                items(garbages.size) { index ->
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp, vertical = 1.dp)
-                            .clip(RoundedCornerShape(5.dp))
-                            .border(
-                                width = 1.dp,
-                                color = Color.Gray,
-                                shape = RoundedCornerShape(5.dp)
-                            )
-                            .fillMaxWidth()
-                    ) {
-                        var name = "a" + garbages[index].id + "_0"
-                        var drawableId = requireContext().resources.getIdentifier(
-                            name,
-                            "drawable",
-                            requireContext().packageName
-                        )
-                        Image(
-                            painter = painterResource(id = drawableId),           //展示一张图片
-                            contentDescription = "Image of $name",
+                        Row(
                             modifier = Modifier
-                                .height(70.dp)
-                                .padding(8.dp)
+                                .padding(horizontal = 20.dp, vertical = 1.dp)
                                 .clip(RoundedCornerShape(5.dp))
-                        )
-                        Column(modifier = Modifier.padding(end = 35.dp),) {
-                            garbages[index].name?.let { Text(text = it,style = MaterialTheme.typography.subtitle1.copy(color = Color(color))) }        //标题
-                            Column(
-                                modifier = Modifier.fillMaxHeight(),
-                                verticalArrangement = Arrangement.Center
+                                .border(
+                                    width = 1.dp,
+                                    color = Color.Gray,
+                                    shape = RoundedCornerShape(5.dp)
+                                )
+                                .fillMaxWidth()
+                                .clickable {
+                                    val intent = Intent(context, GarbageInfoActivity::class.java)
+                                    intent.putExtra("EXTRA_GARBAGE", garbages[index].id)
+                                    startActivity(intent)
+
+
+                                },
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            var name = "a" + garbages[index].id + "_0"
+                            var drawableId = requireContext().resources.getIdentifier(
+                                name,
+                                "drawable",
+                                requireContext().packageName
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .padding(8.dp)
+                                    .weight(2f)
+                                    .align(alignment = Alignment.CenterVertically)
                             ) {
-                                garbages[index].description?.let {
-                                    Text(                                                        //描述
-                                        text = it,
-                                        style = MaterialTheme.typography.subtitle2
-                                    ) }
+                                Image(
+                                    painter = painterResource(id = drawableId),           //展示一张图片
+                                    contentDescription = "Image of $name",
+                                    modifier = Modifier
+                                        .height(70.dp)
+                                        .clip(
+                                            RoundedCornerShape(8.dp)
+                                        )
+                                )
                             }
+
+                            Column(
+                                modifier = Modifier
+                                    .weight(4.2f)
+                                    .align(Alignment.CenterVertically)
+                            ) {
+                                garbages[index].name?.let {
+                                    Text(
+                                        text = it,
+                                        style = MaterialTheme.typography.subtitle1.copy(
+                                            color = Color(
+                                                color
+                                            )
+                                        )
+                                    )
+                                }        //标题
+                                Column(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    garbages[index].description?.let {
+                                        Text(                                                        //描述
+                                            text = it,
+                                            style = MaterialTheme.typography.subtitle2
+                                        )
+                                    }
+                                }
+
+                            }
+                            isCollected = if (garbages[index].likeIndex == 1) {
+                                R.drawable.baseline_check_circle_24
+                            } else {
+                                R.drawable.baseline_note_add_24
+                            }
+                            val coroutineScope = rememberCoroutineScope()
+                            Box(modifier = Modifier
+                                .fillMaxSize()
+                                .weight(0.8f)
+                                .align(Alignment.CenterVertically)
+                                .clickable(enabled = isClickable) {
+                                    showProgress = true
+                                    isClickable = false
+                                    garbages[index].likeIndex =
+                                        if (garbages[index].likeIndex == 1) 0 else 1
+                                    coroutineScope.launch {
+                                        withContext(Dispatchers.IO) {
+                                            if (dao != null) {
+                                                dao.updateGarbageLikeIndex(
+                                                    garbages[index].id,
+                                                    if (garbages[index].likeIndex == 1) 1 else 0
+                                                )
+                                             //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
+                                                withContext(Dispatchers.Main) {
+                                                    Toast
+                                                        .makeText(
+                                                            requireContext(),
+                                                            "success,the like_index of garbage_${garbages[index].name} is ${garbages[index].likeIndex}",
+                                                            Toast.LENGTH_SHORT
+                                                        )
+                                                        .show()
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // 1.5秒后再次启用点击
+                                    lifecycleScope.launch {
+                                        delay(1500)
+                                        isClickable = true
+                                        showProgress = false
+                                    }
+                                }, contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(id = isCollected),
+                                    contentDescription = "add to collection"
+                                )
+
+
+                            }
+
 
                         }
 
                     }
+                }
+                if (showProgress) {
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.Center)
+                        .background(Color.Gray.copy(alpha = 0.4f))) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
 
                 }
+
+
             }
+
 
         }
 
@@ -238,3 +344,5 @@ class FragmentTwo : Fragment() {
             }
     }
 }
+
+
