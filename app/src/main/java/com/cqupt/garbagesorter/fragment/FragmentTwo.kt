@@ -1,5 +1,6 @@
 package com.cqupt.garbagesorter.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.*
@@ -27,8 +30,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.provider.FontsContractCompat.Columns.RESULT_CODE
+import androidx.core.provider.FontsContractCompat.FontRequestCallback.RESULT_OK
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.cqupt.garbagesorter.R
@@ -54,6 +60,8 @@ class FragmentTwo : Fragment() {
     private var param2: String? = null
     private lateinit var toolbar: Toolbar
     private lateinit var composeView: ComposeView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,10 +89,12 @@ class FragmentTwo : Fragment() {
             R.drawable.youhailaji_xiao
         )
         composeView.setContent {
+
+
+
             SetList1(imageList)
 
         }
-
 
 
         return view
@@ -98,7 +108,17 @@ class FragmentTwo : Fragment() {
         var isCollected by remember { mutableStateOf(R.drawable.baseline_note_add_24) }
         var isClickable by remember { mutableStateOf(true) }
         var showProgress by remember { mutableStateOf(false) }
-        var progressVisibleTime by remember { mutableStateOf(0L) }
+        var state by remember { mutableStateOf(0) }
+        val launcher = rememberLauncherForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                state++
+                Log.d("TAG state is ", "the state now is $state")
+            }
+        }
+
+      //  var progressVisibleTime by remember { mutableStateOf(0L) }
         Column {                        //总页面布局
             Column(                                               //第一列，种类选择栏
                 modifier = Modifier.height(80.dp)
@@ -153,13 +173,9 @@ class FragmentTwo : Fragment() {
             //根据图片值查询数据库
 
             Log.d("selectedImage TAG-------->", "selectedImage:$selectedImage")
-            val database = Room.databaseBuilder(
-                requireContext(),
-                MyDatabase::class.java,
-                "garbage2"
-            ).createFromAsset("test.db").build()
+            val database = MyDatabase.getDatabase(LocalContext.current)
             val dao = database.GarbageDao()
-            LaunchedEffect(garbages, itemType) {  //传入的对象改变时执行语句
+            LaunchedEffect(garbages, itemType,state) {  //传入的对象改变时执行语句
                 withContext(Dispatchers.IO) {
                     val result = dao?.getByType(itemType)
                     garbages.clear()
@@ -190,8 +206,7 @@ class FragmentTwo : Fragment() {
                                 .clickable {
                                     val intent = Intent(context, GarbageInfoActivity::class.java)
                                     intent.putExtra("EXTRA_GARBAGE", garbages[index].id)
-                                    startActivity(intent)
-
+                                    launcher.launch(intent)
 
                                 },
                             horizontalArrangement = Arrangement.Center
@@ -269,7 +284,7 @@ class FragmentTwo : Fragment() {
                                                     garbages[index].id,
                                                     if (garbages[index].likeIndex == 1) 1 else 0
                                                 )
-                                             //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
+                                                //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
                                                 withContext(Dispatchers.Main) {
                                                     Toast
                                                         .makeText(
@@ -322,6 +337,7 @@ class FragmentTwo : Fragment() {
 
 
     }
+
 
 
     companion object {

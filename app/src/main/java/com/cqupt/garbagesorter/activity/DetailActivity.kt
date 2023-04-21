@@ -116,11 +116,7 @@ class DetailActivity : AppCompatActivity() {
     @Composable
     private fun ListByRoom() {
         var type: String? = intent.getStringExtra("garbage_type")
-        val database = Room.databaseBuilder(
-            applicationContext,
-            MyDatabase::class.java,
-            "garbage1"
-        ).createFromAsset("test.db").build()
+        val database = MyDatabase.getDatabase(this)
         val dao = database.GarbageDao()
         val garbages = remember { mutableStateListOf<Garbage>() }
         LaunchedEffect(garbages) {

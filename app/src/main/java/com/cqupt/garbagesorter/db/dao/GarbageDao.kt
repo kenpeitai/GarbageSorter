@@ -8,6 +8,8 @@ import com.cqupt.garbagesorter.db.bean.Garbage
 interface GarbageDao {
     @Query("SELECT * FROM garbage")
     fun getAll(): List<Garbage>
+    @Query("SELECT * FROM garbage WHERE like_index = :likeIndex")
+    fun getCollection(likeIndex: Int):List<Garbage>?
     @Query("SELECT * FROM garbage WHERE id = :id")
     fun getById(id: String): Garbage?
     @Query("SELECT * FROM garbage WHERE type = :type")

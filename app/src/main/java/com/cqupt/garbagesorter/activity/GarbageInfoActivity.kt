@@ -1,5 +1,6 @@
 package com.cqupt.garbagesorter.activity
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -45,11 +46,7 @@ class GarbageInfoActivity : ComponentActivity() {
         Log.d("TAG GARBAGE id-------------->", "onCreate: $id")
 
 
-        appDatabase = Room.databaseBuilder(
-            this,
-            MyDatabase::class.java,
-            "garbage_info_database"
-        ).createFromAsset("test.db").build()
+        appDatabase = MyDatabase.getDatabase(this)
         dao = appDatabase.GarbageDao()!!
         setContent {
 
@@ -293,10 +290,11 @@ class GarbageInfoActivity : ComponentActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        appDatabase.close()
+        Log.d("Tag of GarbageInfoActivity", "onBackPressed: ")
+        val resultIntent = Intent()
+        setResult(Activity.RESULT_OK, resultIntent)
         finish()
-
+        super.onBackPressed()
     }
 }
 

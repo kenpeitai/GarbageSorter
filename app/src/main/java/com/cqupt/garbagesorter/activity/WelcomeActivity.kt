@@ -34,11 +34,11 @@ class WelcomeActivity : AppCompatActivity() {
     private fun initDB() {
 
 
-        appDatabase = Room.databaseBuilder(
+       /* appDatabase = Room.databaseBuilder(
             applicationContext,
             MyDatabase::class.java,
             DATABASE_NAME
-        ).createFromAsset(DB_FILE_NAME).build()
+        ).createFromAsset(DB_FILE_NAME).build()*/
         //dbTest()
         goToMainAc()
     }

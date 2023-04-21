@@ -57,11 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
         composeView = findViewById(R.id.searchactivity_composeView)
         val context = applicationContext
-        val database = Room.databaseBuilder(
-            this,
-            MyDatabase::class.java,
-            "garbage3"
-        ).createFromAsset("test.db").build()
+        val database = MyDatabase.getDatabase(this)
         val dao = database.GarbageDao()
 
         composeView.setContent {
