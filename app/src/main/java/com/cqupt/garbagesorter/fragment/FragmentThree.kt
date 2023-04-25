@@ -13,10 +13,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -26,19 +27,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.lifecycleScope
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.GarbageInfoActivity
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // TODO: Rename parameter arguments, choose names that match
@@ -92,9 +98,11 @@ class FragmentThree : Fragment() {
         var garbages = remember { mutableStateListOf<Garbage>() }
         var count by remember { mutableStateOf(0) }
         var showProgress by remember { mutableStateOf(false) }
-
+        var showDialog by remember { mutableStateOf(false) }
+        var currentItem by remember { mutableStateOf(-1) }
         LaunchedEffect(key1 = garbages, key2 = count, block = {
             withContext(Dispatchers.IO) {
+
                 val result = datebase.GarbageDao()?.getCollection(1)
                 garbages.clear()
                 if (result != null) {
@@ -115,7 +123,7 @@ class FragmentThree : Fragment() {
             }
             val refreshState = rememberPullRefreshState(refreshing = false, onRefresh = {
                 count++
-                Toast.makeText(requireContext(), "刷新中 count:$count", Toast.LENGTH_SHORT).show()
+            //    Toast.makeText(requireContext(), "刷新中 count:$count", Toast.LENGTH_SHORT).show()
                 showProgress = true
             })
             Box(modifier = Modifier.pullRefresh(state = refreshState, enabled = true)) {
@@ -123,7 +131,7 @@ class FragmentThree : Fragment() {
                     items(garbages.size) { index: Int ->
                         var expanded by remember { mutableStateOf(false) }
                         var selectedIndex by remember { mutableStateOf(0) }
-                        val items = listOf("Option 1", "Option 2", "Option 3")
+                        val items = listOf("取消收藏", "分享", "Option 3")
 
                         Row(
                             modifier = Modifier
@@ -175,37 +183,63 @@ class FragmentThree : Fragment() {
                             }
                             Column(modifier = Modifier.weight(1.5f)) {
                                 Row(modifier = Modifier.padding(5.dp)) {
+
                                     Icon(
-                                        painter = painterResource(id = R.drawable.baseline_expand_more_24),
+                                        imageVector = Icons.Filled.ArrowDropDown,
                                         contentDescription = "",
-                                        modifier = Modifier.clickable { expanded = true }
+                                        modifier = Modifier
+                                            .size(30.dp)
+                                            .clickable { expanded = true }
                                     )
 
-                                    DropdownMenu(
-                                        expanded = expanded,
-                                        onDismissRequest = { expanded = false },
-                                        modifier = Modifier.wrapContentSize()
-                                    ) {
-                                        items.forEachIndexed { index, item ->
-                                            Column(modifier = Modifier.fillMaxWidth().padding(vertical = 0.dp)) {
-                                                DropdownMenuItem(modifier = Modifier.height(40.dp).padding(vertical=0.dp), onClick = {
-                                                    selectedIndex = index
-                                                    expanded = false
-                                                }) {
-                                                    Text(text = item)
+                                        DropdownMenu(
+                                            expanded = expanded,
+                                            onDismissRequest = { expanded = false },
+                                            modifier = Modifier
+                                                .wrapContentSize()
+                                                .padding(0.dp)
+                                        ) {
+                                            items.forEachIndexed { index1, item ->
+                                                Column(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(vertical = 0.dp)
+                                                ) {
+                                                    DropdownMenuItem(
+                                                        modifier = Modifier
+                                                            .height(35.dp)
+                                                            .padding(vertical = 0.dp), onClick = {
+                                                            selectedIndex = index1
+                                                            expanded = false
+                                                            when (selectedIndex) {
+                                                                0 -> {
+                                                                    showDialog = true
+                                                                    currentItem = index
+                                                                }
+                                                                1 -> {}
+                                                                2 -> {}
+                                                                else -> {}
+                                                            }
+                                                        }) {
+                                                        Row(horizontalArrangement = Arrangement.Center) {
+                                                            when(index1){
+                                                                0-> Icon(imageVector = Icons.Filled.Clear, contentDescription = "", modifier = Modifier.align(Alignment.CenterVertically))
+                                                                1-> Icon(imageVector = Icons.Filled.Share, contentDescription = "", modifier = Modifier.align(Alignment.CenterVertically))
+                                                                2-> Icon(imageVector = Icons.Filled.Warning, contentDescription = "", modifier = Modifier.align(Alignment.CenterVertically))
+                                                            }
+                                                            Text(text = item, modifier = Modifier.padding(start = 5.dp), textAlign = TextAlign.Center)
+                                                        }
+                                                                                                        }
+
+
                                                 }
-                                                Divider(
-                                                    color = Color.Gray,
-                                                    thickness = 0.5.dp,
-                                                    modifier = Modifier.fillMaxWidth()
-                                                )
 
                                             }
+
 
                                         }
 
 
-                                    }
                                     garbages[index].type?.let {
                                         Text(
                                             text = it,
@@ -218,10 +252,7 @@ class FragmentThree : Fragment() {
                                             )
                                         )
                                     }
-                                    Image(
-                                        painter = painterResource(id = R.drawable.ic_other),
-                                        contentDescription = "img_type"
-                                    )
+
                                 }
                                 garbages[index].description?.let {
                                     Text(
@@ -243,9 +274,37 @@ class FragmentThree : Fragment() {
                 if (showProgress) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
+                if (showDialog){
+                    AlertDialog(onDismissRequest = { showDialog = false },
+                        title = {Text(text = "Dialog Title")},
+                        text = { Text(text = "Dialog Message") },
+                        confirmButton = {
+                            TextButton(onClick = {
+                                showDialog = false
+                                lifecycleScope.launch{
+                                    withContext(Dispatchers.IO){
+                                        datebase.GarbageDao()?.updateGarbageLikeIndex(id = garbages[currentItem].id, likeIndex = 0)
+                                        withContext(Dispatchers.Main){
+                                            currentItem = -1
+                                            Toast.makeText(requireContext(),"删除成功",Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+
+                                }
+                            }) {
+                                Text(text = "OK")
+                            }
+                        }
+
+
+                    )
+                        
+
+                }
             }
         }
     }
+    
 
     companion object {
         /**

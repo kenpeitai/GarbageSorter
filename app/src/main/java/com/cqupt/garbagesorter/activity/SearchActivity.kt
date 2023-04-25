@@ -150,6 +150,7 @@ class SearchActivity : AppCompatActivity() {
 
                         }
                         Divider(color = Color.Gray, thickness = 1.dp)
+
                     }
                 }
 
