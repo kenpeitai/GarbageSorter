@@ -1,19 +1,31 @@
 package com.cqupt.garbagesorter.activity
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.media.RingtoneManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.ViewPager
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.fragment.FragmentOne
+import com.cqupt.garbagesorter.service.CheckNotifyPermissionUtils
+import com.cqupt.garbagesorter.service.MyForegroundService
 import com.cqupt.garbagesorter.viewpager.MyPagerAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
-
-
 
 
 /*
@@ -53,9 +65,80 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        check()
+     //   initNotification()
+
 
     }
 
+    private fun check() {
+        if (!CheckNotifyPermissionUtils.checkNotifyPermission(this)){
+            Log.d("checkNotifyPermission---------->", "initNotification:  false")
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("未开启通知栏权限")
+            builder.setMessage("请开启应用的通知栏权限，否则将无法正常使用某些功能。")
+            builder.setPositiveButton("去开启") { dialog, which ->
+                CheckNotifyPermissionUtils.tryJumpNotifyPage(this)
+                initNotification1()
+            }
+            builder.setNegativeButton("拒绝", null)
+            builder.show()
+
+        }else{initNotification1()}
+    }
+
+    private fun initNotification1() {
+        val intent = Intent(this, MyForegroundService::class.java)
+        intent.putExtra("cmd",0)
+        startService(intent)
+
+        Log.d("startService---------->", "initNotification1:  true")
+    }
+
+
+    private fun initNotification() {
+        val channelId = "my_channel_id"
+        val channelName = "My Channel"
+        val channelDescription = "My Channel Description"
+
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, channelName, importance).apply {
+            description = channelDescription
+        }
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+
+        val intent = Intent(this, SearchActivity::class.java)
+        val pendingIntent =
+            PendingIntent.getActivity(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+        val title = "应用运行中"
+        val content = "点击搜索"
+        val smallIcon = R.drawable.baseline_search_24
+        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(smallIcon)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true)
+            .setSound(soundUri)
+            .setContentIntent(pendingIntent)
+
+
+        val notificationId = 1001
+        notificationManager.notify(notificationId, builder.build())
+
+
+    }
 
 
     private fun initView() {

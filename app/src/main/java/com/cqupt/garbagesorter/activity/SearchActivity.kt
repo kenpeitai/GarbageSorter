@@ -5,6 +5,7 @@ import android.content.Intent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.app.ActionBar
@@ -34,6 +35,7 @@ import androidx.room.Room
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
+import com.cqupt.garbagesorter.service.CheckNotifyPermissionUtils
 import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.launch
@@ -51,7 +53,9 @@ class SearchActivity : AppCompatActivity() {
 
         initSearchView()
 
+
     }
+
 
     private fun initSearchView() {
 
@@ -128,7 +132,9 @@ class SearchActivity : AppCompatActivity() {
                             searchResult[index].name?.let {
                                 Text(
                                     text = it,
-                                    modifier = Modifier.weight(1f).padding(start = 16.dp)
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 16.dp)
                                 )
                             }
                             searchResult[index].type?.let {

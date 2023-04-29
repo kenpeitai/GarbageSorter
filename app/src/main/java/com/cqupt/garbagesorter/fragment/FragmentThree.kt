@@ -1,6 +1,7 @@
 package com.cqupt.garbagesorter.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -27,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.GarbageInfoActivity
@@ -46,6 +46,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -216,7 +217,7 @@ class FragmentThree : Fragment() {
                                                                     showDialog = true
                                                                     currentItem = index
                                                                 }
-                                                                1 -> {}
+                                                                1 -> {Share(garbages[index])}
                                                                 2 -> {}
                                                                 else -> {}
                                                             }
@@ -304,7 +305,32 @@ class FragmentThree : Fragment() {
             }
         }
     }
-    
+
+    private fun Share(garbage: Garbage) {
+        var name = "a" + garbage.id + "_2"
+        var drawableId = requireContext().resources.getIdentifier(
+            name,
+            "drawable",
+            requireContext().packageName
+        )
+        val inputStream = resources.openRawResource(drawableId)
+        val imageFile = File(requireContext().cacheDir,name)
+        imageFile.outputStream().use { out->
+            inputStream.copyTo(out)
+        }
+        val imageUri = Uri.parse("android.resource://${requireContext().packageName}/$drawableId")
+        val permission = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, "垃圾分类，人人有责： ${garbage.name} 属于 ${garbage.type}, ${garbage.description}")
+            putExtra(Intent.EXTRA_STREAM, imageUri)
+            type = "image/jpeg"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "分享到...")
+        startActivity(shareIntent)
+    }
+
 
     companion object {
         /**
