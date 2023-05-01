@@ -83,7 +83,7 @@ class FragmentFour : Fragment() {
                             color = Color.Gray,
                             thickness = 0.5.dp
                         )
-                        Row(modifier = Modifier.clickable {
+                        Row(modifier = Modifier.fillMaxWidth().clickable {
                             showDialog = true
                         }) {
                             Icon(
