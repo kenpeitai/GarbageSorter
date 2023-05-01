@@ -5,41 +5,45 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
+import androidx.compose.ui.window.Dialog
 import com.cqupt.garbagesorter.R
+import com.cqupt.garbagesorter.activity.base.BaseActivity
 import com.cqupt.garbagesorter.activity.ui.theme.GarbageSorterTheme
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
 import com.cqupt.garbagesorter.db.dao.GarbageDao
 import kotlinx.coroutines.*
 
-class GarbageInfoActivity : ComponentActivity() {
+class GarbageInfoActivity : BaseActivity() {
     lateinit var dao: GarbageDao
     lateinit var appDatabase: MyDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id = intent.getStringExtra("EXTRA_GARBAGE")
@@ -82,13 +86,95 @@ class GarbageInfoActivity : ComponentActivity() {
 
     @Composable
     private fun InitView(garbage: Garbage) {
-        Column() {
-            SetBar()
-            Spacer(modifier = Modifier.heightIn(20.dp))
-            SetTitleAndType(garbage)
-            SetImage(garbage)
-            SetDescription(garbage)
+       var showDialog by remember { mutableStateOf(false) }
+        var currentItem by remember { mutableStateOf(-1) }
+        Box() {
+            Column() {
+                SetBar()
+                Spacer(modifier = Modifier.heightIn(20.dp))
+                SetTitleAndType(garbage)
+
+                val name1 = "a" + garbage.id + "_0"
+                val name2 = "a" + garbage.id + "_1"
+                val name3 = "a" + garbage.id + "_2"
+                val drawableId1 = LocalContext.current.resources.getIdentifier(
+                    name1,
+                    "drawable",
+                    LocalContext.current.packageName
+                )
+                val drawableId2 = LocalContext.current.resources.getIdentifier(
+                    name2,
+                    "drawable",
+                    LocalContext.current.packageName
+                )
+                val drawableId3 = LocalContext.current.resources.getIdentifier(
+                    name3,
+                    "drawable",
+                    LocalContext.current.packageName
+                )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+
+                    Image(
+                        painter = painterResource(id = drawableId1),           //展示一张图片
+                        contentDescription = "Image of $name1",
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 15.dp, horizontal = 5.dp)
+                            .clip(
+                                RoundedCornerShape(5.dp)
+                            )
+                            .clickable {
+                                showDialog = true
+                                currentItem = drawableId1
+                            }
+                    )
+
+                    Image(
+                        painter = painterResource(id = drawableId2),           //展示一张图片
+                        contentDescription = "Image of $name1",
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 15.dp, horizontal = 5.dp)
+                            .clip(
+                                RoundedCornerShape(5.dp)
+                            )
+                            .clickable {
+                                showDialog = true
+                                currentItem = drawableId2
+                            }
+                    )
+
+
+                    Image(
+                        painter = painterResource(id = drawableId3),           //展示一张图片
+                        contentDescription = "Image of $name1",
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 15.dp, horizontal = 5.dp)
+                            .clip(
+                                RoundedCornerShape(5.dp)
+                            )
+                            .clickable {
+                                showDialog = true
+                                currentItem = drawableId3
+                            }
+                    )
+
+                }
+
+
+                SetDescription(garbage)
+            }
+            if (showDialog) {
+                Dialog(onDismissRequest = { showDialog = false }) {
+                    Box() {
+                    ImageWithZoomableBackground(painterResource(id = currentItem))
+                    }
+                }
+            }
+
         }
+        
 
     }
 
@@ -102,10 +188,10 @@ class GarbageInfoActivity : ComponentActivity() {
             else -> Color.DarkGray
         }
         val tip = when (garbage.type) {
-            "可回收物" -> LocalContext.current.resources.getString(R.string.type11)
-            "厨余垃圾" -> LocalContext.current.resources.getString(R.string.type22)
-            "其他垃圾" -> LocalContext.current.resources.getString(R.string.type33)
-            "有害垃圾" -> LocalContext.current.resources.getString(R.string.type44)
+            "可回收物" -> resources.getString(R.string.type11)
+            "厨余垃圾" -> resources.getString(R.string.type22)
+            "其他垃圾" -> resources.getString(R.string.type33)
+            "有害垃圾" -> resources.getString(R.string.type44)
             else -> ""
         }
 
@@ -117,7 +203,7 @@ class GarbageInfoActivity : ComponentActivity() {
         }
         Spacer(modifier = Modifier.heightIn(20.dp))
         Text(
-            text = "▋ 投放要求",
+            text = resources.getString(R.string.garbageinfoactivity_text1),
             style = MaterialTheme.typography.body1.copy(color = textColor),
             modifier = Modifier.padding(start = 20.dp, end = 20.dp)
         )
@@ -131,62 +217,13 @@ class GarbageInfoActivity : ComponentActivity() {
     }
 
     private @Composable
-    fun SetImage(garbage: Garbage) {
-        val name1 = "a" + garbage.id + "_0"
-        val name2 = "a" + garbage.id + "_1"
-        val name3 = "a" + garbage.id + "_2"
-        val drawableId1 = LocalContext.current.resources.getIdentifier(
-            name1,
-            "drawable",
-            LocalContext.current.packageName
-        )
-        val drawableId2 = LocalContext.current.resources.getIdentifier(
-            name2,
-            "drawable",
-            LocalContext.current.packageName
-        )
-        val drawableId3 = LocalContext.current.resources.getIdentifier(
-            name3,
-            "drawable",
-            LocalContext.current.packageName
-        )
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-
-            Image(
-                painter = painterResource(id = drawableId1),           //展示一张图片
-                contentDescription = "Image of $name1",
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 15.dp, horizontal = 5.dp)
-                    .clip(
-                        RoundedCornerShape(5.dp)
-                    )
-            )
-
-            Image(
-                painter = painterResource(id = drawableId2),           //展示一张图片
-                contentDescription = "Image of $name1",
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 15.dp, horizontal = 5.dp)
-                    .clip(
-                        RoundedCornerShape(5.dp)
-                    )
-            )
+    fun SetImage(garbage: Garbage, showDialog: Boolean) {
 
 
-            Image(
-                painter = painterResource(id = drawableId3),           //展示一张图片
-                contentDescription = "Image of $name1",
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 15.dp, horizontal = 5.dp)
-                    .clip(
-                        RoundedCornerShape(5.dp)
-                    )
-            )
+    }
 
-        }
+    private fun showImageDialog(drawableId1: Int) {
+
     }
 
     @Composable
@@ -228,7 +265,7 @@ class GarbageInfoActivity : ComponentActivity() {
             Button(
                 onClick = {
                     if (garbage.likeIndex == 1) {
-                        Toast.makeText(context, "收藏已存在", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, resources.getString(R.string.garbageinfoactivity_text2), Toast.LENGTH_SHORT).show()
                     } else {
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
@@ -237,7 +274,7 @@ class GarbageInfoActivity : ComponentActivity() {
 
                                     Toast.makeText(
                                         context,
-                                        "收藏成功！garbage_likeindex is ${garbage.likeIndex}",
+                                        resources.getString(R.string.garbageinfoactivity_text3),
                                         Toast.LENGTH_SHORT
                                     ).show()
 
@@ -260,7 +297,7 @@ class GarbageInfoActivity : ComponentActivity() {
                         contentDescription = null,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
-                    Text(text = "添加至收藏")
+                    Text(text =  resources.getString(R.string.garbageinfoactivity_text4))
                 }
 
             }
@@ -271,6 +308,45 @@ class GarbageInfoActivity : ComponentActivity() {
 
 
 
+    @Composable
+    fun ImageWithZoomableBackground(
+        image: Painter,
+        modifier: Modifier = Modifier
+    ) {
+
+
+        // Define the scale animation
+        val scale = animateFloatAsState(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 1000),
+
+        )
+
+        Box(
+            modifier = modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = image,
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .scale(scale.value)
+            )
+            Text(text = resources.getString(R.string.garbageinfoactivity_image_hint), modifier =Modifier.align(
+                Alignment.BottomCenter) )
+
+        }
+    }
+
+
+
+
+
+
+
 
 
     @Preview
@@ -278,7 +354,7 @@ class GarbageInfoActivity : ComponentActivity() {
     private fun SetBar() {
         TopAppBar(
             title = {
-                Text(text = "搜索结果", color = Color.White)
+                Text(text =  resources.getString(R.string.garbageinfoactivity_bartitle), color = Color.White)
             },
             navigationIcon = {
                 IconButton(onClick = { onBackPressed() }) {

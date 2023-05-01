@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="title_activity_main2">MainActivity2</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="page_1">Home</string>
+    <string name="page_2">Categories</string>
+    <string name="page_3">Collection</string>
+    <string name="page_4">Settings</string>
+    <string name="welcome_to_garbagesorter">Everyone is responsible for separating garbage!</string>
+    <string name="loading">Data is loading, please wait…</string>
+    <string name="this_is_activity_detail">this is activity_detail</string>
+    <string name="name_of_all_garbage">▋ Separation of domestic waste</string>
+    <string name="tips">▋ Instruction</string>
+    <string name="tips_text">Encourage recyclables to be sold into the waste recycling system, or handed over to the two network integration service points, or put into the recyclables collection containers; strictly prohibit hazardous waste to other household waste collection containers; daily household waste should be separated from dry and wet waste.</string>
+    <string name="fragment_one_edit">Please enter the correct content</string>
+    <string name="searchViewTitle">Search</string>
+    <string name="title_activity_garbage_info">GarbageInfoActivity</string>
+    <string name="type1">Recyclables</string>
+    <string name="type2">Kitchen waste</string>
+    <string name="type3">Other garbage</string>
+    <string name="type4">Hazardous waste</string>
+    <string name="type11">Cast lightly \n keep clean and dry, avoid pollution \n waste paper as flat as possible \n three-dimensional packaging, please empty the contents, clean and flatten put \n sharp edges, should be wrapped and put</string>
+    <string name="type22">Pure liquid food waste, such as milk, should be poured directly into the downspout
+Wet garbage with packaging should be separated after removing the packaging, and the packaging should be put into the corresponding recyclables or dry garbage container</string>
+    <string name="type33">Drain as much water as possible
+Difficult to identify the type of household waste should be put into the dry garbage containers</string>
+    <string name="type44">Please be careful when putting it down
+If easily damaged, please put it gently with the package or wrap it.
+If it is volatile, please seal it and put it in</string>
+    <string name="dialog_title">Notification bar permission is not enabled</string>
+    <string name="dialog_message">Please turn on the notification bar permission of the app, otherwise you will not be able to use some functions properly.</string>
+    <string name="dialog_btn1">go to open</string>
+    <string name="dialog_btn2">refuse</string>
+    <string name="searchactivity_bartitle">Search</string>
+    <string name="garbageinfoactivity_text1">▋ Placement requirements</string>
+    <string name="garbageinfoactivity_text2">Collection already exists</string>
+    <string name="garbageinfoactivity_text3">Bookmarked successfully!</string>
+    <string name="garbageinfoactivity_text4">Add to collection</string>
+    <string name="garbageinfoactivity_bartitle">Search Results</string>
+    <string name="deatil_des11">Refers to suitable for recycling and resource utilization of household waste. Recyclables mainly include: waste paper, waste plastic bottles, waste metals, waste packaging, waste textiles, waste electrical and electronic products, waste glass, waste paper-plastic-aluminum composite packaging, etc.</string>
+    <string name="detail_des12">Cast lightly \\n clean and dry, avoid pollution \\n waste paper as flat as possible \\n three-dimensional packaging, please empty the contents, clean and flatten put \\n sharp edges, should be wrapped and put</string>
+    <string name="detail_des21">Dry garbage is other garbage, refers to other domestic waste in addition to recyclable waste, hazardous waste, wet waste</string>
+    <string name="detail_des22">Drain as much water as possible Difficult to identify the type of household waste into the dry garbage container</string>
+    <string name="detail_des31">It refers to the waste that causes direct or potential harm to human health or natural environment living. Common hazardous waste includes waste lamps, waste paint, pesticides, waste cosmetics, expired drugs, waste batteries, waste light bulbs, waste water silver thermometers, etc. Hazardous waste needs to be disposed of safely in accordance with special and correct methods.</string>
+    <string name="detail_des32">Please be careful when putting it down If easily damaged, please put it gently with the package or wrap it. If it is volatile, please seal it and put it in</string>
+    <string name="detail_des41">Perishable garbage (kitchen garbage), also known as wet garbage, generally refers to food operators, unit canteens and other food waste generated in the production process, as well as perishable garbage generated in household life, mainly including: leftovers, vegetable stems and leaves, meat offal, fruit shells and melon rinds, etc.</string>
+    <string name="detail_des42">Pure liquid food waste, such as milk, should be dumped directly into the downspout Wet garbage with packaging should be separated after removing the packaging, and the packaging should be put into the corresponding recyclables or dry garbage container</string>
+    <string name="detail_text1">▋ Definition</string>
+    <string name="detail_text2">▋ Placement requirements</string>
+    <string name="detail_text3">▋ Common Garbage</string>
+    <string name="fragment_four_bartitle">Settings</string>
+    <string name="set_language">Language</string>
+    <string name="service_title">Aplication running</string>
+    <string name="service_text">Click to search</string>
+    <string name="garbageinfoactivity_image_hint">Click anywhere to close</string>
+    <string name="mainactivity_title">"Garbage Separation Guide"</string>
+    <string name="mainactivity_subtitle">Protection of the environment is everyone\'s responsibility</string>
+    <string name="fragment_three_title">My Collection</string>
+    <string name="menuitem1">Cancel Bookmark</string>
+    <string name="menuitem2">Share</string>
+    <string name="menuitem3">Report error</string>
+    <string name="fragment_four_dialogtitle">Choose Language</string>
+    <string name="fragment_four_dialogbtn">Confirm</string>
+    <string name="fragment_four_dialogbtn2">Cancel</string>
+
+</resources>

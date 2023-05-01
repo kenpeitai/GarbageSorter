@@ -15,17 +15,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
 import com.cqupt.garbagesorter.R
+import com.cqupt.garbagesorter.activity.base.BaseActivity
+import com.cqupt.garbagesorter.activity.locale.LocaleManager
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
 import kotlinx.coroutines.*
+import java.util.*
 
-
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : BaseActivity() {
     private lateinit var appDatabase: MyDatabase
-    private val DATABASE_NAME = "garbage.db"
-    private val DB_FILE_NAME = "test.db"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setLanguage()
         setContentView(R.layout.activity_welcome)
         initDB()
 
@@ -34,24 +36,26 @@ class WelcomeActivity : AppCompatActivity() {
     private fun initDB() {
 
 
-       /* appDatabase = Room.databaseBuilder(
-            applicationContext,
-            MyDatabase::class.java,
-            DATABASE_NAME
-        ).createFromAsset(DB_FILE_NAME).build()*/
         //dbTest()
         goToMainAc()
     }
 
-    private fun dbTest() {
-        CoroutineScope(Dispatchers.IO).launch {
-            var garbageList = appDatabase.GarbageDao()?.getAll()
-            if (garbageList != null) {
-                for (garbage in garbageList) {
-                    Log.d("DBtestTAG", garbage.name + "-" + garbage.id)
-                }
-            }
-        }
+    private fun setLanguage() {
+        // 获取 SharedPreferences 实例
+        val sharedPref = applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        )
+
+// 读取之前保存的语言设置，如果不存在则使用系统默认语言
+        val savedLanguage = sharedPref.getString("language", Locale.getDefault().language)
+        Log.d("----------->Language:", "setLanguage: $savedLanguage")
+        val appLocale = Locale(savedLanguage)
+// 使用读取到的语言设置设置当前语言
+        LocaleManager(this).setLocale(appLocale)
+        LocaleManager(applicationContext).setLocale(appLocale)
+
+
     }
 
 
@@ -63,27 +67,5 @@ class WelcomeActivity : AppCompatActivity() {
         }, 1000)
     }
 
-    private fun databaseExists(context: Context, databaseName: String): Boolean {
-        val databaseFile = context.getDatabasePath(databaseName)
-        return databaseFile.exists()
-    }
 
-    //从sql文件中导入数据库表
-    private fun importDataFromSqlFile(
-        context: Context,
-        appDatabase: MyDatabase,
-        sqlFileName: String,
-    ) {
-
-
-        val inputStream = context.assets.open(sqlFileName)
-        val sqlStatements = inputStream.bufferedReader().use { it.readText() }.split(";")
-
-        for (statement in sqlStatements) {
-            Log.d("SQL--------------------------------->", statement.toString())
-            appDatabase.openHelper.writableDatabase.execSQL(statement)
-        }
-
-
-    }
 }

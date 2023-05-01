@@ -80,7 +80,7 @@ class FragmentTwo : Fragment() {
         val view = inflater.inflate(R.layout.fragment_two, container, false)
         toolbar = view.findViewById(R.id.fragment2_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "垃圾分类"
+        (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.page_2)
         composeView = view.findViewById(R.id.fragment2_composeView)
         val imageList = listOf(
             R.drawable.kehuishouwu_xiao,

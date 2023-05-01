@@ -81,7 +81,7 @@ class FragmentThree : Fragment() {
         val view = inflater.inflate(R.layout.fragment_three, container, false)
         toolbar = view.findViewById(R.id.fragment3_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = "我的收藏"
+        (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.fragment_three_title)
         composeView = view.findViewById(R.id.fragment3_composeView)
         composeView.setContent {
             SetComposeView()
@@ -132,7 +132,11 @@ class FragmentThree : Fragment() {
                     items(garbages.size) { index: Int ->
                         var expanded by remember { mutableStateOf(false) }
                         var selectedIndex by remember { mutableStateOf(0) }
-                        val items = listOf("取消收藏", "分享", "Option 3")
+                        val items = listOf(
+                            resources.getString(R.string.menuitem1),
+                            resources.getString(R.string.menuitem2),
+                            resources.getString(R.string.menuitem3)
+                        )
 
                         Row(
                             modifier = Modifier
@@ -296,8 +300,6 @@ class FragmentThree : Fragment() {
                                 Text(text = "OK")
                             }
                         }
-
-
                     )
                         
 
@@ -349,6 +351,7 @@ class FragmentThree : Fragment() {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
+
             }
     }
 }

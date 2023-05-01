@@ -33,6 +33,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.room.Room
 import com.cqupt.garbagesorter.R
+import com.cqupt.garbagesorter.activity.base.BaseActivity
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
 import com.cqupt.garbagesorter.service.CheckNotifyPermissionUtils
@@ -42,7 +43,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
     lateinit var toolbar: Toolbar
     lateinit var composeView: ComposeView
 
@@ -173,7 +174,7 @@ class SearchActivity : AppCompatActivity() {
     private fun initToolbar() {
         toolbar = findViewById(R.id.searchactivity_toolbar)
         setSupportActionBar(toolbar)
-        val title1 = "搜索"
+        val title1 = resources.getString(R.string.searchactivity_bartitle)
         supportActionBar?.title = title1
 
     }

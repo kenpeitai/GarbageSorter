@@ -63,8 +63,10 @@ class MyForegroundService : Service() {
 
     private fun createNotification() {
         val notification = NotificationCompat.Builder(this, "channel_id")
-            .setContentTitle("应用运行中")
-            .setContentText("点击搜索")
+            .setContentTitle(resources.getString(
+                R.string.service_title
+            ))
+            .setContentText(resources.getString(R.string.service_text))
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(R.drawable.baseline_search_24)

@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager.widget.ViewPager
 import com.cqupt.garbagesorter.R
+import com.cqupt.garbagesorter.activity.base.BaseActivity
 import com.cqupt.garbagesorter.fragment.FragmentOne
 import com.cqupt.garbagesorter.service.CheckNotifyPermissionUtils
 import com.cqupt.garbagesorter.service.MyForegroundService
@@ -55,7 +56,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  * #                                                   #
 */
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var bottomNavView: BottomNavigationView
     private lateinit var fragmentManager: FragmentManager
@@ -75,13 +76,13 @@ class MainActivity : AppCompatActivity() {
         if (!CheckNotifyPermissionUtils.checkNotifyPermission(this)){
             Log.d("checkNotifyPermission---------->", "initNotification:  false")
             val builder = AlertDialog.Builder(this)
-            builder.setTitle("未开启通知栏权限")
-            builder.setMessage("请开启应用的通知栏权限，否则将无法正常使用某些功能。")
-            builder.setPositiveButton("去开启") { dialog, which ->
+            builder.setTitle(resources.getString(R.string.dialog_title))
+            builder.setMessage(resources.getString(R.string.dialog_message))
+            builder.setPositiveButton(resources.getString(R.string.dialog_btn1)) { dialog, which ->
                 CheckNotifyPermissionUtils.tryJumpNotifyPage(this)
                 initNotification1()
             }
-            builder.setNegativeButton("拒绝", null)
+            builder.setNegativeButton(resources.getString(R.string.dialog_btn2), null)
             builder.show()
 
         }else{initNotification1()}

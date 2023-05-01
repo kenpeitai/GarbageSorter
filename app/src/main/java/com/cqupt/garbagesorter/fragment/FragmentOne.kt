@@ -70,7 +70,7 @@ class FragmentOne : Fragment() {
         //设置toolbar
         toolbar = view.findViewById(R.id.fragment1_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        val title = " 垃圾分类指南"
+        val title = resources.getString(R.string.mainactivity_title)
         toolbar.title = title
         for (i in 0 until toolbar.childCount) {
             val view = toolbar.getChildAt(i)
@@ -91,7 +91,8 @@ class FragmentOne : Fragment() {
                     textView.layoutParams = params
                 }
             }
-            toolbar.subtitle = "爱护环境,人人有责"
+            toolbar.subtitle = resources.getString(R.string.mainactivity_subtitle)
+
 
         }
 
