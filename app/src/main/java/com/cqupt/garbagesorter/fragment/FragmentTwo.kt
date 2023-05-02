@@ -177,7 +177,7 @@ class FragmentTwo : Fragment() {
             val dao = database.GarbageDao()
             LaunchedEffect(garbages, itemType,state) {  //传入的对象改变时执行语句
                 withContext(Dispatchers.IO) {
-                    val result = dao?.getByType(itemType)
+                    val result = dao?.getByTypeChooser(itemType,requireContext())
                     garbages.clear()
 
                     if (result != null) {

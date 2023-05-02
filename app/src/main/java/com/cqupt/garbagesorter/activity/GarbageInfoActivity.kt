@@ -68,7 +68,7 @@ class GarbageInfoActivity : BaseActivity() {
             }
             LaunchedEffect(garbage,garbage.likeIndex) {
                 withContext(Dispatchers.IO) {
-                    garbage = id?.let { dao.getById(it) }!!
+                    garbage = id?.let { dao.getByIdChooser(it,this@GarbageInfoActivity) }!!
                 }
 
             }
@@ -181,17 +181,17 @@ class GarbageInfoActivity : BaseActivity() {
     private @Composable
     fun SetDescription(garbage: Garbage) {
         val textColor = when (garbage.type) {
-            "可回收物" -> Color(0xFF3162A7)
-            "厨余垃圾" -> Color(0xFF1C7070)
-            "其他垃圾" -> Color(0xFF56686C)
-            "有害垃圾" -> Color(0xFFA42B3E)
+            resources.getString(R.string.type1) -> Color(0xFF3162A7)
+            resources.getString(R.string.type2) -> Color(0xFF1C7070)
+            resources.getString(R.string.type3) -> Color(0xFF56686C)
+            resources.getString(R.string.type4) -> Color(0xFFA42B3E)
             else -> Color.DarkGray
         }
         val tip = when (garbage.type) {
-            "可回收物" -> resources.getString(R.string.type11)
-            "厨余垃圾" -> resources.getString(R.string.type22)
-            "其他垃圾" -> resources.getString(R.string.type33)
-            "有害垃圾" -> resources.getString(R.string.type44)
+            resources.getString(R.string.type1) -> resources.getString(R.string.type11)
+            resources.getString(R.string.type2)  -> resources.getString(R.string.type22)
+            resources.getString(R.string.type3) -> resources.getString(R.string.type33)
+            resources.getString(R.string.type4) -> resources.getString(R.string.type44)
             else -> ""
         }
 
@@ -229,10 +229,10 @@ class GarbageInfoActivity : BaseActivity() {
     @Composable
     private fun SetTitleAndType(garbage: Garbage) {
         val imageId = when (garbage.type) {
-            "可回收物" -> R.drawable.kehuishouwu_xiao
-            "厨余垃圾" -> R.drawable.chuyulaji_xiao
-            "其他垃圾" -> R.drawable.qitalaji_xiao
-            "有害垃圾" -> R.drawable.youhailaji_xiao
+            resources.getString(R.string.type1) -> R.drawable.kehuishouwu_xiao
+            resources.getString(R.string.type2)-> R.drawable.chuyulaji_xiao
+            resources.getString(R.string.type3) -> R.drawable.qitalaji_xiao
+            resources.getString(R.string.type4) -> R.drawable.youhailaji_xiao
             else -> R.drawable.kehuishouwu_xiao
         }
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -269,7 +269,7 @@ class GarbageInfoActivity : BaseActivity() {
                     } else {
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
-                                dao.updateGarbageLikeIndex(garbage.id, 1)
+                                dao.updateGarbageLikeIndexAll(garbage.id, 1)
                                 withContext(Dispatchers.Main) {
 
                                     Toast.makeText(

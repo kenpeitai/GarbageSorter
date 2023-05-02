@@ -104,7 +104,7 @@ class FragmentThree : Fragment() {
         LaunchedEffect(key1 = garbages, key2 = count, block = {
             withContext(Dispatchers.IO) {
 
-                val result = datebase.GarbageDao()?.getCollection(1)
+                val result = datebase.GarbageDao()?.getCollectionChooser(1,requireContext())
                 garbages.clear()
                 if (result != null) {
                     garbages.addAll(result)
@@ -288,7 +288,7 @@ class FragmentThree : Fragment() {
                                 showDialog = false
                                 lifecycleScope.launch{
                                     withContext(Dispatchers.IO){
-                                        datebase.GarbageDao()?.updateGarbageLikeIndex(id = garbages[currentItem].id, likeIndex = 0)
+                                        datebase.GarbageDao()?.updateGarbageLikeIndexAll(id = garbages[currentItem].id, likeIndex = 0)
                                         withContext(Dispatchers.Main){
                                             currentItem = -1
                                             Toast.makeText(requireContext(),"删除成功",Toast.LENGTH_SHORT).show()

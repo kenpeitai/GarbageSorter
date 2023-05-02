@@ -59,7 +59,7 @@ class DetailActivity : BaseActivity() {
 
     private fun initViewData() {
         when (intent.getStringExtra("garbage_type")) {
-            "可回收物" -> {
+            resources.getString(R.string.type1) -> {
                 imageId = R.drawable.kehuishouwu_xiao
                 title = resources.getString(R.string.type1)
                 color = 0xFF3162A7
@@ -67,16 +67,16 @@ class DetailActivity : BaseActivity() {
                 discription =resources.getString(R.string.deatil_des11)
                 discription2 = resources.getString(R.string.detail_des12)
             }
-            "其他垃圾" -> {
+            resources.getString(R.string.type3) -> {
                 imageId = R.drawable.qitalaji_xiao
                 title = resources.getString(R.string.type3)
                 color = 0xFF56686C
-                subTitle = "RESIDUAL WASTE"
+                subTitle = "RESIDUAL(OTHER) WASTE"
                 discription = resources.getString(R.string.detail_des21)
                 discription2 =resources.getString(R.string.detail_des22)
 
             }
-            "有害垃圾" -> {
+            resources.getString(R.string.type4)-> {
                 imageId = R.drawable.youhailaji_xiao
                 title = resources.getString(R.string.type4)
                 color = 0xFFA42B3E
@@ -85,7 +85,7 @@ class DetailActivity : BaseActivity() {
                 discription2 =resources.getString(R.string.detail_des32)
 
             }
-            "厨余垃圾" -> {
+            resources.getString(R.string.type2) -> {
                 imageId = R.drawable.chuyulaji_xiao
                 title = resources.getString(R.string.type2)
                 color = 0xFF1C7070
@@ -119,7 +119,7 @@ class DetailActivity : BaseActivity() {
         val garbages = remember { mutableStateListOf<Garbage>() }
         LaunchedEffect(garbages) {
             withContext(Dispatchers.IO) {
-                val result = type?.let { dao?.getTop10ByType(it) }
+                val result = type?.let { dao?.getTop10ByTypeChooser(it,this@DetailActivity) }
                 garbages.clear()
                 if (result != null) {
                     garbages.addAll(result)

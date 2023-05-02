@@ -47,8 +47,8 @@ class WelcomeActivity : BaseActivity() {
             Context.MODE_PRIVATE
         )
 
-// 读取之前保存的语言设置，如果不存在则使用系统默认语言
-        val savedLanguage = sharedPref.getString("language", Locale.getDefault().language)
+// 读取之前保存的语言设置，如果不存在则使用中文
+        val savedLanguage = sharedPref.getString("language", Locale.CHINA.language)
         Log.d("----------->Language:", "setLanguage: $savedLanguage")
         val appLocale = Locale(savedLanguage)
 // 使用读取到的语言设置设置当前语言

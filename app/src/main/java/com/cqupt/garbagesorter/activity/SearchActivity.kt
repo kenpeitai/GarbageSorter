@@ -84,7 +84,7 @@ class SearchActivity : BaseActivity() {
                         scope.launch {
                             withContext(Dispatchers.IO) {
                                 if (searchText.isNotEmpty()) {
-                                    val result = dao?.getGarbageListByName("%$searchText%")
+                                    val result = dao?.getGarbageListByNameChooser("%$searchText%",this@SearchActivity)
                                     searchResult.clear()
                                     if (result != null) {
                                         searchResult.addAll(result)

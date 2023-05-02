@@ -52,19 +52,19 @@ class FragmentOne : Fragment() {
 
         // 查找 ImageView 控件并设置单击事件
         view.findViewById<ImageView>(R.id.image_other_garbage).setOnClickListener {
-            startDetailActivity("其他垃圾")
+            startDetailActivity(resources.getString(R.string.type3))
         }
 
         view.findViewById<ImageView>(R.id.image_harmful_garbage).setOnClickListener {
-            startDetailActivity("有害垃圾")
+            startDetailActivity(resources.getString(R.string.type4))
         }
 
         view.findViewById<ImageView>(R.id.image_recyclable_garbage).setOnClickListener {
-            startDetailActivity("可回收物")
+            startDetailActivity(resources.getString(R.string.type1))
         }
 
         view.findViewById<ImageView>(R.id.image_wet_garbage).setOnClickListener {
-            startDetailActivity("厨余垃圾")
+            startDetailActivity(resources.getString(R.string.type2))
         }
 
         //设置toolbar
