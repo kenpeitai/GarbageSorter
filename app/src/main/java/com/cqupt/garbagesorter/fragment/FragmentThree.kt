@@ -81,7 +81,8 @@ class FragmentThree : Fragment() {
         val view = inflater.inflate(R.layout.fragment_three, container, false)
         toolbar = view.findViewById(R.id.fragment3_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.fragment_three_title)
+        (activity as AppCompatActivity).supportActionBar?.title =
+            resources.getString(R.string.fragment_three_title)
         composeView = view.findViewById(R.id.fragment3_composeView)
         composeView.setContent {
             SetComposeView()
@@ -104,7 +105,7 @@ class FragmentThree : Fragment() {
         LaunchedEffect(key1 = garbages, key2 = count, block = {
             withContext(Dispatchers.IO) {
 
-                val result = datebase.GarbageDao()?.getCollectionChooser(1,requireContext())
+                val result = datebase.GarbageDao()?.getCollectionChooser(1, requireContext())
                 garbages.clear()
                 if (result != null) {
                     garbages.addAll(result)
@@ -114,21 +115,39 @@ class FragmentThree : Fragment() {
             }
         })
 
-        Column(modifier = Modifier.padding(15.dp)) {
-            Row(
-                modifier = Modifier
-                    .height(0.dp)
-                    .fillMaxWidth()
-                    .background(color = Color.DarkGray)
-            ) {
-            }
+        Column(modifier = Modifier
+            .padding(15.dp)
+            .fillMaxWidth()
+            .heightIn(300.dp)) {
+
             val refreshState = rememberPullRefreshState(refreshing = false, onRefresh = {
                 count++
-            //    Toast.makeText(requireContext(), "刷新中 count:$count", Toast.LENGTH_SHORT).show()
+                //    Toast.makeText(requireContext(), "刷新中 count:$count", Toast.LENGTH_SHORT).show()
                 showProgress = true
             })
-            Box(modifier = Modifier.pullRefresh(state = refreshState, enabled = true)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(300.dp)
+                    .pullRefresh(state = refreshState, enabled = true)
+            ) {
+                if (garbages.size == 0) {
+                    Row(modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(15.dp), horizontalArrangement = Arrangement.End) {
+                        Text(text = resources.getString(R.string.fragment_three_tpis),modifier = Modifier.align(Alignment.CenterVertically))
+                        IconButton(onClick = {
+                            count++
+                            showProgress = true
+                        }, modifier = Modifier.align(Alignment.CenterVertically)) {
+                            Icon(imageVector = Icons.Filled.Refresh, contentDescription = null)
+                        }
+                    }
+
+                }
                 LazyColumn() {
+
+
                     items(garbages.size) { index: Int ->
                         var expanded by remember { mutableStateOf(false) }
                         var selectedIndex by remember { mutableStateOf(0) }
@@ -197,52 +216,70 @@ class FragmentThree : Fragment() {
                                             .clickable { expanded = true }
                                     )
 
-                                        DropdownMenu(
-                                            expanded = expanded,
-                                            onDismissRequest = { expanded = false },
-                                            modifier = Modifier
-                                                .wrapContentSize()
-                                                .padding(0.dp)
-                                        ) {
-                                            items.forEachIndexed { index1, item ->
-                                                Column(
+                                    DropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false },
+                                        modifier = Modifier
+                                            .wrapContentSize()
+                                            .padding(0.dp)
+                                    ) {
+                                        items.forEachIndexed { index1, item ->
+                                            Column(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .padding(vertical = 0.dp)
+                                            ) {
+                                                DropdownMenuItem(
                                                     modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .padding(vertical = 0.dp)
-                                                ) {
-                                                    DropdownMenuItem(
-                                                        modifier = Modifier
-                                                            .height(35.dp)
-                                                            .padding(vertical = 0.dp), onClick = {
-                                                            selectedIndex = index1
-                                                            expanded = false
-                                                            when (selectedIndex) {
-                                                                0 -> {
-                                                                    showDialog = true
-                                                                    currentItem = index
-                                                                }
-                                                                1 -> {Share(garbages[index])}
-                                                                2 -> {}
-                                                                else -> {}
+                                                        .height(35.dp)
+                                                        .padding(vertical = 0.dp), onClick = {
+                                                        selectedIndex = index1
+                                                        expanded = false
+                                                        when (selectedIndex) {
+                                                            0 -> {
+                                                                showDialog = true
+                                                                currentItem = index
                                                             }
-                                                        }) {
-                                                        Row(horizontalArrangement = Arrangement.Center) {
-                                                            when(index1){
-                                                                0-> Icon(imageVector = Icons.Filled.Clear, contentDescription = "", modifier = Modifier.align(Alignment.CenterVertically))
-                                                                1-> Icon(imageVector = Icons.Filled.Share, contentDescription = "", modifier = Modifier.align(Alignment.CenterVertically))
-                                                                2-> Icon(imageVector = Icons.Filled.Warning, contentDescription = "", modifier = Modifier.align(Alignment.CenterVertically))
+                                                            1 -> {
+                                                                Share(garbages[index])
                                                             }
-                                                            Text(text = item, modifier = Modifier.padding(start = 5.dp), textAlign = TextAlign.Center)
+                                                            2 -> {}
+                                                            else -> {}
                                                         }
-                                                                                                        }
-
-
+                                                    }) {
+                                                    Row(horizontalArrangement = Arrangement.Center) {
+                                                        when (index1) {
+                                                            0 -> Icon(
+                                                                imageVector = Icons.Filled.Clear,
+                                                                contentDescription = "",
+                                                                modifier = Modifier.align(Alignment.CenterVertically)
+                                                            )
+                                                            1 -> Icon(
+                                                                imageVector = Icons.Filled.Share,
+                                                                contentDescription = "",
+                                                                modifier = Modifier.align(Alignment.CenterVertically)
+                                                            )
+                                                            2 -> Icon(
+                                                                imageVector = Icons.Filled.Warning,
+                                                                contentDescription = "",
+                                                                modifier = Modifier.align(Alignment.CenterVertically)
+                                                            )
+                                                        }
+                                                        Text(
+                                                            text = item,
+                                                            modifier = Modifier.padding(start = 5.dp),
+                                                            textAlign = TextAlign.Center
+                                                        )
+                                                    }
                                                 }
+
 
                                             }
 
-
                                         }
+
+
+                                    }
 
 
                                     garbages[index].type?.let {
@@ -279,19 +316,26 @@ class FragmentThree : Fragment() {
                 if (showProgress) {
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
-                if (showDialog){
+                if (showDialog) {
                     AlertDialog(onDismissRequest = { showDialog = false },
-                        title = {Text(text = "Dialog Title")},
+                        title = { Text(text = "Dialog Title") },
                         text = { Text(text = "Dialog Message") },
                         confirmButton = {
                             TextButton(onClick = {
                                 showDialog = false
-                                lifecycleScope.launch{
-                                    withContext(Dispatchers.IO){
-                                        datebase.GarbageDao()?.updateGarbageLikeIndexAll(id = garbages[currentItem].id, likeIndex = 0)
-                                        withContext(Dispatchers.Main){
+                                lifecycleScope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        datebase.GarbageDao()?.updateGarbageLikeIndexAll(
+                                            id = garbages[currentItem].id,
+                                            likeIndex = 0
+                                        )
+                                        withContext(Dispatchers.Main) {
                                             currentItem = -1
-                                            Toast.makeText(requireContext(),"删除成功",Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "删除成功",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                         }
                                     }
 
@@ -301,7 +345,7 @@ class FragmentThree : Fragment() {
                             }
                         }
                     )
-                        
+
 
                 }
             }
@@ -316,16 +360,20 @@ class FragmentThree : Fragment() {
             requireContext().packageName
         )
         val inputStream = resources.openRawResource(drawableId)
-        val imageFile = File(requireContext().cacheDir,name)
-        imageFile.outputStream().use { out->
+        val imageFile = File(requireContext().cacheDir, name)
+        imageFile.outputStream().use { out ->
             inputStream.copyTo(out)
         }
         val imageUri = Uri.parse("android.resource://${requireContext().packageName}/$drawableId")
-        val permission = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+        val permission =
+            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 
         val sendIntent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "垃圾分类，人人有责： ${garbage.name} 属于 ${garbage.type}, ${garbage.description}")
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "垃圾分类，人人有责： ${garbage.name} 属于 ${garbage.type}, ${garbage.description}"
+            )
             putExtra(Intent.EXTRA_STREAM, imageUri)
             type = "image/jpeg"
         }

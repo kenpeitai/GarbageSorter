@@ -11,7 +11,7 @@
           </node>
         </introspection-scope>
       </schema-mapping>
-      <url>jdbc:sqlite:identifier.sqlite</url>
+      <url>jdbc:sqlite:E:/AndroidProjects/GarbageSorter/app/src/main/assets/test1.db</url>
       <remarks />
       <driver-info id="sqlite.xerial" />
       <ssh-properties enabled="false" />

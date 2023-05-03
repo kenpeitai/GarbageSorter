@@ -157,11 +157,11 @@ class FragmentTwo : Fragment() {
                 mutableStateOf("default")
             }
             itemType = when (selectedImage) {
-                0 -> "可回收物"
-                1 -> "厨余垃圾"
-                2 -> "其他垃圾"
-                3 -> "有害垃圾"
-                else -> "可回收物"
+                0 -> resources.getString(R.string.type1)
+                1 -> resources.getString(R.string.type2)
+                2 -> resources.getString(R.string.type3)
+                3 -> resources.getString(R.string.type4)
+                else -> resources.getString(R.string.type1)
             }
             color = when (selectedImage) {
                 0 -> 0xFF3162A7
@@ -280,7 +280,7 @@ class FragmentTwo : Fragment() {
                                     coroutineScope.launch {
                                         withContext(Dispatchers.IO) {
                                             if (dao != null) {
-                                                dao.updateGarbageLikeIndex(
+                                                dao.updateGarbageLikeIndexAll(
                                                     garbages[index].id,
                                                     if (garbages[index].likeIndex == 1) 1 else 0
                                                 )

@@ -146,10 +146,10 @@ class SearchActivity : BaseActivity() {
                                         .weight(1f)
                                         .padding(end = 16.dp),
                                     color = when (searchResult[index].type) {
-                                        "可回收物" -> Color(0xFF3162A7)
-                                        "厨余垃圾" -> Color(0xFF1C7070)
-                                        "其他垃圾" -> Color(0xFF56686C)
-                                        "有害垃圾" -> Color(0xFFA42B3E)
+                                        resources.getString(R.string.type1) -> Color(0xFF3162A7)
+                                        resources.getString(R.string.type2) -> Color(0xFF1C7070)
+                                        resources.getString(R.string.type3) -> Color(0xFF56686C)
+                                        resources.getString(R.string.type4) -> Color(0xFFA42B3E)
                                         else -> Color.DarkGray
                                     }
                                 )

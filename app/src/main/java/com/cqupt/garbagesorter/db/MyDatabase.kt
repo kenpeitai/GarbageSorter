@@ -1,15 +1,17 @@
 package com.cqupt.garbagesorter.db
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
+import com.cqupt.garbagesorter.db.bean.GarbageEN
 import com.cqupt.garbagesorter.db.dao.GarbageDao
 import java.util.Locale
 
 
-@Database(entities = [Garbage::class], version = 1, exportSchema = false)
+@Database(entities = [Garbage::class,GarbageEN::class], version = 1, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
     abstract fun GarbageDao(): GarbageDao?
 
@@ -26,7 +28,7 @@ abstract class MyDatabase : RoomDatabase() {
                     context.applicationContext,
                     MyDatabase::class.java,
                     "garbage_info_database"
-                ).createFromAsset("test.db").build()
+                ).createFromAsset("test1.db").build()
                 INSTANCE = appDatabase
                 return appDatabase
 

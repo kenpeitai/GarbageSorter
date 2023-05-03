@@ -59,8 +59,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : BaseActivity() {
     private lateinit var viewPager: ViewPager
     private lateinit var bottomNavView: BottomNavigationView
-    private lateinit var fragmentManager: FragmentManager
-    private lateinit var fragmentTransaction: FragmentTransaction
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,7 +137,6 @@ class MainActivity : BaseActivity() {
 
         val notificationId = 1001
         notificationManager.notify(notificationId, builder.build())
-
 
     }
 

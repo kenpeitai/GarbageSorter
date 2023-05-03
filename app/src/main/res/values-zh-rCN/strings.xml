@@ -68,4 +68,5 @@
     <string name="fragment_four_dialogtitle">选择语言</string>
     <string name="fragment_four_dialogbtn">确认</string>
     <string name="fragment_four_dialogbtn2">取消</string>
+    <string name="fragment_three_tpis">没有内容？试试刷新</string>
 </resources>

@@ -36,8 +36,21 @@ class WelcomeActivity : BaseActivity() {
     private fun initDB() {
 
 
-        //dbTest()
-        goToMainAc()
+        dbTest()
+
+    }
+
+    private fun dbTest() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO){
+                val garbages = MyDatabase.getDatabase(this@WelcomeActivity).GarbageDao()?.getAll()
+                Log.d("getAllEN()------------------>", "dbTest: $garbages")
+                withContext(Dispatchers.Main){
+                    goToMainAc()
+                }
+            }
+        }
+
     }
 
     private fun setLanguage() {

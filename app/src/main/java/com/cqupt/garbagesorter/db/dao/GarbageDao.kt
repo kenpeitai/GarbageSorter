@@ -116,7 +116,7 @@ interface GarbageDao {
 
     @Query("UPDATE garbage_en SET like_index = :likeIndex WHERE id = :id")
     suspend fun updateGarbageLikeIndexEN(id: String, likeIndex: Int)
-    @Transaction
+
     suspend fun updateGarbageLikeIndexAll(id: String, likeIndex: Int){
         updateGarbageLikeIndex(id,likeIndex)
         updateGarbageLikeIndexEN(id,likeIndex)
@@ -136,14 +136,14 @@ interface GarbageDao {
 
     fun toGarbage(en: GarbageEN?):Garbage? {
         if (en != null) {
-            return Garbage(id = en.id, type = en.type, name = en.name, description = en.description, likeIndex = en.likeIndex, img = null)
+            return Garbage(id = en.id_en, type = en.type_en, name = en.name_en, description = en.description_en, likeIndex = en.likeIndex_en, img = null)
         }else{
             return null
         }
     }
     fun toGarbageList(enList: List<GarbageEN>?): List<Garbage>? {
         return enList?.map { en ->
-            Garbage(id = en.id, type = en.type, name = en.name, description = en.description, likeIndex = en.likeIndex, img = null)
+            Garbage(id = en.id_en, type = en.type_en, name = en.name_en, description = en.description_en, likeIndex = en.likeIndex_en, img = null)
         }
     }
 }

@@ -68,5 +68,6 @@ If it is volatile, please seal it and put it in</string>
     <string name="fragment_four_dialogtitle">Choose Language</string>
     <string name="fragment_four_dialogbtn">Confirm</string>
     <string name="fragment_four_dialogbtn2">Cancel</string>
+    <string name="fragment_three_tpis">No content? Try refreshing</string>
 
 </resources>

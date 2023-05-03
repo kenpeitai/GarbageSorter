@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.SearchActivity
@@ -34,10 +35,11 @@ class MyForegroundService : Service() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     private fun getPendingIntent(): PendingIntent {
         // 点击通知栏时打开 SearchActivity
         val intent = Intent(this, SearchActivity::class.java)
-        return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
