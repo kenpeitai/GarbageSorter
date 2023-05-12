@@ -3,6 +3,7 @@ package com.cqupt.garbagesorter.fragment
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
@@ -40,6 +41,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FragmentFour : Fragment() {
+    private lateinit var sharedPref: SharedPreferences
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -171,7 +174,7 @@ class FragmentFour : Fragment() {
 
     private fun setAppLocale(value: Locale) {
 
-        val sharedPref = requireContext().applicationContext.getSharedPreferences(
+         sharedPref = requireContext().applicationContext.getSharedPreferences(
             "MyAppPreferences",
             Context.MODE_PRIVATE
         )

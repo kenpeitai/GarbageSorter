@@ -104,10 +104,10 @@ interface GarbageDao {
     @Transaction
     fun getGarbageListByNameChooser(name: String,context: Context):List<Garbage>{
         val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        when(language){
-            Locale.CHINA.language -> return getGarbageListByName(name)
-            Locale.ENGLISH.language -> return toGarbageList(getGarbageListByNameEN(name))!!
-            else -> return getGarbageListByName(name)
+        return when(language){
+            Locale.CHINA.language -> getGarbageListByName(name)
+            Locale.ENGLISH.language -> toGarbageList(getGarbageListByNameEN(name))!!
+            else -> getGarbageListByName(name)
         }
     }
 

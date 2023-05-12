@@ -64,7 +64,7 @@ class FragmentThree : Fragment() {
     private var param2: String? = null
     private lateinit var toolbar: Toolbar
     private lateinit var composeView: ComposeView
-
+    private lateinit var database: MyDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -96,7 +96,7 @@ class FragmentThree : Fragment() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun SetComposeView() {
-        val datebase = MyDatabase.getDatabase(LocalContext.current)
+         database = MyDatabase.getDatabase(LocalContext.current)
         var garbages = remember { mutableStateListOf<Garbage>() }
         var count by remember { mutableStateOf(0) }
         var showProgress by remember { mutableStateOf(false) }
@@ -105,7 +105,7 @@ class FragmentThree : Fragment() {
         LaunchedEffect(key1 = garbages, key2 = count, block = {
             withContext(Dispatchers.IO) {
 
-                val result = datebase.GarbageDao()?.getCollectionChooser(1, requireContext())
+                val result = database.GarbageDao()?.getCollectionChooser(1, requireContext())
                 garbages.clear()
                 if (result != null) {
                     garbages.addAll(result)
@@ -115,10 +115,12 @@ class FragmentThree : Fragment() {
             }
         })
 
-        Column(modifier = Modifier
-            .padding(15.dp)
-            .fillMaxWidth()
-            .heightIn(300.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(15.dp)
+                .fillMaxWidth()
+                .heightIn(300.dp)
+        ) {
 
             val refreshState = rememberPullRefreshState(refreshing = false, onRefresh = {
                 count++
@@ -132,10 +134,15 @@ class FragmentThree : Fragment() {
                     .pullRefresh(state = refreshState, enabled = true)
             ) {
                 if (garbages.size == 0) {
-                    Row(modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(15.dp), horizontalArrangement = Arrangement.End) {
-                        Text(text = resources.getString(R.string.fragment_three_tpis),modifier = Modifier.align(Alignment.CenterVertically))
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(15.dp), horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = resources.getString(R.string.fragment_three_tpis),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
                         IconButton(onClick = {
                             count++
                             showProgress = true
@@ -240,9 +247,11 @@ class FragmentThree : Fragment() {
                                                                 showDialog = true
                                                                 currentItem = index
                                                             }
+
                                                             1 -> {
                                                                 Share(garbages[index])
                                                             }
+
                                                             2 -> {}
                                                             else -> {}
                                                         }
@@ -254,11 +263,13 @@ class FragmentThree : Fragment() {
                                                                 contentDescription = "",
                                                                 modifier = Modifier.align(Alignment.CenterVertically)
                                                             )
+
                                                             1 -> Icon(
                                                                 imageVector = Icons.Filled.Share,
                                                                 contentDescription = "",
                                                                 modifier = Modifier.align(Alignment.CenterVertically)
                                                             )
+
                                                             2 -> Icon(
                                                                 imageVector = Icons.Filled.Warning,
                                                                 contentDescription = "",
@@ -325,7 +336,7 @@ class FragmentThree : Fragment() {
                                 showDialog = false
                                 lifecycleScope.launch {
                                     withContext(Dispatchers.IO) {
-                                        datebase.GarbageDao()?.updateGarbageLikeIndexAll(
+                                        database.GarbageDao()?.updateGarbageLikeIndexAll(
                                             id = garbages[currentItem].id,
                                             likeIndex = 0
                                         )

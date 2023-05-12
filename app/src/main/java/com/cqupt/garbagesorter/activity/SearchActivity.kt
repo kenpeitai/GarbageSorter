@@ -1,15 +1,7 @@
 package com.cqupt.garbagesorter.activity
 
-import android.content.Context
 import android.content.Intent
-
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,28 +17,31 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.room.Room
+import androidx.lifecycle.lifecycleScope
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.base.BaseActivity
 import com.cqupt.garbagesorter.db.MyDatabase
 import com.cqupt.garbagesorter.db.bean.Garbage
-import com.cqupt.garbagesorter.service.CheckNotifyPermissionUtils
+import com.cqupt.garbagesorter.db.bean.SearchHistory
+import com.cqupt.garbagesorter.db.dao.GarbageDao
+import com.cqupt.garbagesorter.db.dao.HistoryDao
 import kotlinx.coroutines.Dispatchers
-
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class SearchActivity : BaseActivity() {
     lateinit var toolbar: Toolbar
     lateinit var composeView: ComposeView
-
+    lateinit var database: MyDatabase
+    lateinit var dao:GarbageDao
+    lateinit var hdao:HistoryDao
+    private var refreahIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -62,15 +57,35 @@ class SearchActivity : BaseActivity() {
 
         composeView = findViewById(R.id.searchactivity_composeView)
         val context = applicationContext
-        val database = MyDatabase.getDatabase(this)
-        val dao = database.GarbageDao()
+         database = MyDatabase.getDatabase(this)
+         dao = database.GarbageDao()!!
+         hdao = database.historyDao()!!
 
         composeView.setContent {
 
             var searchText by remember { mutableStateOf("") }
             var searchResult = remember { mutableStateListOf<Garbage>() }
             val scope = rememberCoroutineScope()
+            var historyList = remember {
+                mutableStateListOf<SearchHistory>()
+            }
+            var garbageHistoryList = remember {
+                mutableStateListOf<Garbage>()
+            }
 
+            LaunchedEffect(key1 = refreahIndex, block = {
+                withContext(Dispatchers.IO){
+                    historyList.clear()
+                    historyList.addAll(hdao.getAllSearchHistory())
+                    historyList.sortByDescending { it.searchtimes }
+                    garbageHistoryList.clear()
+                    historyList.map { i ->
+                        dao.getByIdChooser(i.garbageId.toString(),this@SearchActivity)
+                            ?.let { garbageHistoryList.add(it) }
+                    }
+                }
+
+            })
 
             Column(
                 modifier = Modifier
@@ -116,7 +131,29 @@ class SearchActivity : BaseActivity() {
                         }
                     )
                 )
+                if(searchText == ""){
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        items(garbageHistoryList.size) { index ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .clickable { /* 处理点击事件 */ },
+                                elevation = 4.dp
+                            ) {
+                                Text(
+                                    text = garbageHistoryList[index].name!!,
+                                    modifier = Modifier.padding(16.dp)
+                                )
+                            }
+                        }
+                    }
 
+                }
                 LazyColumn {
                     items(searchResult.size) { index ->
                         Row(
@@ -127,7 +164,7 @@ class SearchActivity : BaseActivity() {
                                     val intent = Intent(context, GarbageInfoActivity::class.java)
                                     intent.putExtra("EXTRA_GARBAGE", searchResult[index].id)
                                     startActivity(intent)
-
+                                    updateHistory(searchResult[index])
                                 }
                         ) {
                             searchResult[index].name?.let {
@@ -170,6 +207,28 @@ class SearchActivity : BaseActivity() {
 
     }
 
+    private fun updateHistory(garbage: Garbage) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO){
+                var g = hdao.getSearchHistoryByGarbageId(garbage.id.toInt())
+                if (g == null) {
+                    hdao.insertSearchHistory(SearchHistory(searchtimes = 1, time = getCurrentTimeString(), garbageId = garbage.id.toInt()))
+                }else{
+                    g.searchtimes++
+                    hdao.updateSearchTimes(g)
+                }
+            withContext(Dispatchers.Main){
+                refreahIndex ++
+            }
+            }
+        }
+
+    }
+    fun getCurrentTimeString(): String {
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return currentDateTime.format(formatter)
+    }
 
     private fun initToolbar() {
         toolbar = findViewById(R.id.searchactivity_toolbar)

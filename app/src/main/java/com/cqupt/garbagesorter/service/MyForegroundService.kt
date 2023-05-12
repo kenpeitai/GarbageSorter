@@ -18,18 +18,14 @@ class MyForegroundService : Service() {
     private var isRemove = false //是否需要移除
 
     override fun onCreate() {
-
-
         val channelId = "channel_id"
         val channelName = "My Channel"
         val importance = NotificationManager.IMPORTANCE_HIGH
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, channelName, importance)
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
-
         super.onCreate()
         // 创建通知对象
 
