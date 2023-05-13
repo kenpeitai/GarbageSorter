@@ -69,4 +69,7 @@
     <string name="fragment_four_dialogbtn">确认</string>
     <string name="fragment_four_dialogbtn2">取消</string>
     <string name="fragment_three_tpis">没有内容？试试刷新</string>
+    <string name="delete_history">删除搜索历史</string>
+    <string name="delete_history_title">删除历史记录</string>
+    <string name="delete_history_text">确认删除？</string>
 </resources>

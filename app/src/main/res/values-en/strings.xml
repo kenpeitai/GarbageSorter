@@ -69,5 +69,8 @@ If it is volatile, please seal it and put it in</string>
     <string name="fragment_four_dialogbtn">Confirm</string>
     <string name="fragment_four_dialogbtn2">Cancel</string>
     <string name="fragment_three_tpis">No content? Try refreshing</string>
+    <string name="delete_history">Delete search history</string>
+    <string name="delete_history_title">Delete search history</string>
+    <string name="delete_history_text">Confirm to delete？</string>
 
 </resources>

@@ -19,7 +19,9 @@ interface HistoryDao {
 
     @Query("SELECT * FROM search_history WHERE garbage_id = :garbageId")
     suspend fun getSearchHistoryByGarbageId(garbageId: Int): SearchHistory?
-
-
+    @Query("SELECT * FROM search_history ORDER BY searchtimes DESC LIMIT 15")
+    fun getTop15History(): List<SearchHistory>
+    @Query("DELETE FROM search_history")
+    fun clearHistory()
 
 }

@@ -31,7 +31,7 @@ abstract class MyDatabase : RoomDatabase() {
                     context.applicationContext,
                     MyDatabase::class.java,
                     "garbage_info_database"
-                ).fallbackToDestructiveMigration().createFromAsset("test1.db").build()
+                ).createFromAsset("test1.db").build()
                 INSTANCE = appDatabase
                 return appDatabase
 
