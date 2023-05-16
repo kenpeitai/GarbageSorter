@@ -72,5 +72,6 @@ If it is volatile, please seal it and put it in</string>
     <string name="delete_history">Delete search history</string>
     <string name="delete_history_title">Delete search history</string>
     <string name="delete_history_text">Confirm to delete？</string>
+    <string name="image_chooser">Select opening method</string>
 
 </resources>

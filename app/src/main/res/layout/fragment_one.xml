@@ -1,131 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.FragmentOne">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.FragmentOne">
 
     <!-- TODO: Update blank fragment layout -->
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/fragment1_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/teal_700"
-        android:elevation="4dp"
-        android:gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:subtitleTextAppearance="@style/MyToolbarSubTitleStyle"
-        app:titleMarginTop="3dp"
-        app:titleTextColor="@color/white" />
+            android:id="@+id/fragment1_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/teal_700"
+            app:subtitle="@string/mainactivity_subtitle"
+            android:elevation="4dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:subtitleTextAppearance="@style/MyToolbarSubTitleStyle"
+            app:titleMarginTop="3dp"
+            app:titleTextColor="@color/white" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/fragment1_toolbar"
+            android:text="@string/mainactivity_title"
+            android:textSize="20sp"
+            android:elevation="5dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="17dp"
+            />
 
     <EditText
-        android:id="@+id/fragment_one_edit"
-        android:layout_width="0dp"
-        android:layout_height="34dp"
-        android:paddingHorizontal="5dp"
-        android:layout_marginHorizontal="5dp"
-        android:gravity="center_vertical"
-        android:hint="@string/fragment_one_edit"
-        android:drawableStart="@drawable/baseline_search_24"
-        android:editable="false"
-        android:textSize="12sp"
-        android:layout_marginTop="-17dp"
-        android:background="#FFFFFF"
-        android:elevation="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/first_linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/first_linearLayout"
-        app:layout_constraintTop_toBottomOf="@id/fragment1_toolbar" />
+
+            android:id="@+id/fragment_one_edit"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:paddingHorizontal="5dp"
+            android:layout_marginHorizontal="5dp"
+            android:gravity="center_vertical"
+            android:hint="@string/fragment_one_edit"
+            android:drawableStart="@drawable/baseline_search_24"
+            android:inputType="none"
+            android:textSize="12sp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="-38dp"
+            android:background="#FFFFFF"
+            android:elevation="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/first_linearLayout"
+            app:layout_constraintStart_toStartOf="@+id/first_linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/fragment1_toolbar" />
+
+    <ImageView
+            android:id="@+id/btn_add_photo"
+            android:layout_marginStart="6dp"
+            android:elevation="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_one_edit"
+            app:layout_constraintTop_toTopOf="@+id/fragment_one_edit"
+            android:src="@drawable/baseline_add_a_photo_24"
+            app:layout_constraintStart_toEndOf="@id/fragment_one_edit"
+             />
 
 
     <LinearLayout
 
-        android:id="@+id/first_linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.28"
-        app:layout_constraintWidth_percent="0.5"
-        >
+            android:id="@+id/first_linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="0.07"
+            app:layout_constraintWidth_percent="0.5"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_one_edit">
 
         <ImageView
-            android:layout_margin="5dp"
-            android:id="@+id/image_recyclable_garbage"
-            android:layout_width="147dp"
-            android:layout_height="200dp"
-            android:src="@drawable/image_recyclable_garbage" />
+                android:layout_margin="5dp"
+                android:id="@+id/image_recyclable_garbage"
+                android:layout_width="147dp"
+                android:layout_height="200dp"
+                android:src="@drawable/image_recyclable_garbage" />
 
         <ImageView
-            android:layout_margin="5dp"
-            android:id="@+id/image_wet_garbage"
-            android:layout_width="147dp"
-            android:layout_height="200dp"
-            android:src="@drawable/image_wet_garbage" />
+                android:layout_margin="5dp"
+                android:id="@+id/image_wet_garbage"
+                android:layout_width="147dp"
+                android:layout_height="200dp"
+                android:src="@drawable/image_wet_garbage" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/second_linearLayout"
-        app:layout_constraintTop_toBottomOf="@id/first_linearLayout"
-        app:layout_constraintStart_toStartOf="@id/first_linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.5">
-        <ImageView
-            android:layout_margin="5dp"
-            android:id="@+id/image_other_garbage"
-            android:layout_width="147dp"
-            android:layout_height="200dp"
-            android:src="@drawable/image_other_garbage"
-             />
+            android:id="@+id/second_linearLayout"
+            app:layout_constraintTop_toBottomOf="@id/first_linearLayout"
+            app:layout_constraintStart_toStartOf="@id/first_linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.5">
 
         <ImageView
-            android:layout_margin="5dp"
-            android:id="@+id/image_harmful_garbage"
-            android:layout_width="147dp"
-            android:layout_height="200dp"
-            android:src="@drawable/image_harmful_garbage"
-             />
+                android:layout_margin="5dp"
+                android:id="@+id/image_other_garbage"
+                android:layout_width="147dp"
+                android:layout_height="200dp"
+                android:src="@drawable/image_other_garbage" />
+
+        <ImageView
+                android:layout_margin="5dp"
+                android:id="@+id/image_harmful_garbage"
+                android:layout_width="147dp"
+                android:layout_height="200dp"
+                android:src="@drawable/image_harmful_garbage" />
     </LinearLayout>
-    <TextView
-        android:textColor="@color/teal_700"
-        android:layout_marginBottom="2dp"
-        android:layout_marginStart="6dp"
-        android:textSize="16sp"
-        android:id="@+id/name_of_garbage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/name_of_all_garbage"
-        app:layout_constraintStart_toStartOf="@id/first_linearLayout"
-        app:layout_constraintBottom_toTopOf="@id/first_linearLayout"
-        />
-    <TextView
-        android:layout_marginStart="6dp"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/teal_700"
-        android:id="@+id/tips"
-        android:text="@string/tips"
-        app:layout_constraintTop_toBottomOf="@id/second_linearLayout"
-        app:layout_constraintStart_toStartOf="@id/second_linearLayout"
-        />
 
     <TextView
-        android:id="@+id/tip_discribe"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:lineSpacingExtra="1.5dp"
-        android:text="@string/tips_text"
-        app:layout_constraintEnd_toEndOf="@+id/second_linearLayout"
-        app:layout_constraintStart_toStartOf="@id/second_linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/tips" />
+            android:textColor="@color/teal_700"
+            android:layout_marginBottom="2dp"
+            android:layout_marginStart="6dp"
+            android:textSize="16sp"
+            android:id="@+id/name_of_garbage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name_of_all_garbage"
+            app:layout_constraintStart_toStartOf="@id/first_linearLayout"
+            app:layout_constraintBottom_toTopOf="@id/first_linearLayout" />
+
+    <TextView
+            android:layout_marginStart="6dp"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/teal_700"
+            android:id="@+id/tips"
+            android:text="@string/tips"
+            app:layout_constraintTop_toBottomOf="@id/second_linearLayout"
+            app:layout_constraintStart_toStartOf="@id/second_linearLayout" />
+
+    <TextView
+            android:id="@+id/tip_discribe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:lineSpacingExtra="1.5dp"
+            android:text="@string/tips_text"
+            app:layout_constraintEnd_toEndOf="@+id/second_linearLayout"
+            app:layout_constraintStart_toStartOf="@id/second_linearLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tips" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

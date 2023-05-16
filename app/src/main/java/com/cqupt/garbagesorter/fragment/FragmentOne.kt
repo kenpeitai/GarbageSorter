@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.DetailActivity
+import com.cqupt.garbagesorter.activity.ImageUploadActivity
 import com.cqupt.garbagesorter.activity.SearchActivity
 
 
@@ -68,38 +69,20 @@ class FragmentOne : Fragment() {
         }
 
         //设置toolbar
-        toolbar = view.findViewById(R.id.fragment1_toolbar)
-        (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        val title = resources.getString(R.string.mainactivity_title)
-        toolbar.title = title
-        for (i in 0 until toolbar.childCount) {
-            val view = toolbar.getChildAt(i)
-            if (view is TextView) {
-                val textView = view
-                if (title == textView.text) {
-                    textView.gravity = Gravity.CENTER_HORIZONTAL
-                    textView.gravity = Gravity.TOP
-                    textView.textSize = 18.0f
-                    val params = Toolbar.LayoutParams(
-                        Toolbar.LayoutParams.WRAP_CONTENT,
-                        Toolbar.LayoutParams.WRAP_CONTENT
-
-                    )
-                    params.gravity = Gravity.CENTER_HORIZONTAL
-                    params.gravity = Gravity.TOP
-
-                    textView.layoutParams = params
-                }
-            }
-            toolbar.subtitle = resources.getString(R.string.mainactivity_subtitle)
+        val btn = view.findViewById<ImageView>(R.id.btn_add_photo)
+        btn.setOnClickListener { startImageUploadActivity() }
 
 
-        }
 
         var editText = view.findViewById<EditText>(R.id.fragment_one_edit)
         editText.setOnClickListener { startSearchActivity() }
 
         return view
+    }
+
+    private fun startImageUploadActivity() {
+        val intent = Intent(activity, ImageUploadActivity::class.java)
+        startActivity(intent)
     }
 
     private fun startSearchActivity() {

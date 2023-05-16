@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<paths>
-    <drawable name="image" />
+
+
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path
+            name="my_images"
+            path="Android/data/com.cqupt.garbagesorter/" />
+<!--    <external-path-->
+<!--            name="files_root"-->
+<!--            path="Android/data/com.cqupt.garbagesorter/" />-->
+<!--    <external-path-->
+<!--            name="external_storage_root"-->
+<!--            path="." />-->
+
 
 </paths>
+
