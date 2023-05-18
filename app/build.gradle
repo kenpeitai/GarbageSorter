@@ -75,6 +75,10 @@ dependencies {
     implementation 'com.google.accompanist:accompanist-swiperefresh:0.31.0-alpha'
     implementation files('D:/Download/94c96ff4057f439900e12e056a3c8c71/opensdk_3514_lite_2023-01-13/libs/open_sdk_3.5.14.3_rc26220c_lite.jar')
     implementation 'com.google.accompanist:accompanist-coil:0.15.0'
+    implementation 'org.tensorflow:tensorflow-lite:2.12.0'
+    implementation 'org.tensorflow:tensorflow-lite-gpu:2.12.0'
+    implementation 'org.tensorflow:tensorflow-lite-support:0.4.3'
+
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
     def lifecycle_version = "2.5.1"

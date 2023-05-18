@@ -114,8 +114,11 @@
     <string name="delete_history">删除搜索历史</string>
     <string name="delete_history_title">删除历史记录</string>
     <string name="delete_history_text">确认删除？</string>
-    <string name="title_activity_image_upload">ImageUploadActivity</string>
+    <string name="title_activity_image_upload" translatable="false">ImageUploadActivity</string>
     <string name="image_chooser">选择打开方式</string>
+    <string name="title_activity_image_recognition" translatable="false">ImageRecognitionActivity</string>
+    <string name="recognize_result">识别结果</string>
+    <string name="predict_text">"预测结果为： "</string>
 
 
 </resources>

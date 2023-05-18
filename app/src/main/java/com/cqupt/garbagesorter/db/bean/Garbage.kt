@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "garbage")
 data class Garbage (
+
     @PrimaryKey val id: String,
     val type: String?,
     val name: String?,

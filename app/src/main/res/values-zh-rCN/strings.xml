@@ -73,4 +73,6 @@
     <string name="delete_history_title">删除历史记录</string>
     <string name="delete_history_text">确认删除？</string>
     <string name="image_chooser">选择打开方式</string>
+    <string name="recognize_result">识别结果</string>
+    <string name="predict_text">预测结果为：</string>
 </resources>

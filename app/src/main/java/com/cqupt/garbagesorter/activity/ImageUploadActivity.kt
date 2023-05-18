@@ -149,11 +149,20 @@ class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallbacks{
             val selectedImageUri: Uri? = data?.data
             if (selectedImageUri == null) {
                 imageUri.value = FileProvider.getUriForFile(this,"com.cqupt.garbagesorter.fileprovider",photoFile1)
+                startRecognitionActivity(imageUri.value!!)
             } else {
                 imageUri.value = selectedImageUri // handle the case of image picked from gallery
+                startRecognitionActivity(imageUri.value!!)
             }
         }
     }
+
+    private fun startRecognitionActivity(value: Uri) {
+        intent=Intent(this,ImageRecognitionActivity::class.java)
+        intent.putExtra("imageUri",value.toString())
+        startActivity(intent)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 

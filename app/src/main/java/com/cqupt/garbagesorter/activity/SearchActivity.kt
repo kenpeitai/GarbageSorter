@@ -46,8 +46,8 @@ class SearchActivity : BaseActivity() {
     lateinit var toolbar: Toolbar
     lateinit var composeView: ComposeView
     lateinit var database: MyDatabase
-    lateinit var dao:GarbageDao
-    lateinit var hdao:HistoryDao
+    lateinit var dao: GarbageDao
+    lateinit var hdao: HistoryDao
     private var refreahIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +65,9 @@ class SearchActivity : BaseActivity() {
 
         composeView = findViewById(R.id.searchactivity_composeView)
         val context = applicationContext
-         database = MyDatabase.getDatabase(this)
-         dao = database.GarbageDao()!!
-         hdao = database.historyDao()!!
+        database = MyDatabase.getDatabase(this)
+        dao = database.GarbageDao()!!
+        hdao = database.historyDao()!!
 
         composeView.setContent {
 
@@ -82,19 +82,35 @@ class SearchActivity : BaseActivity() {
             }
             var showDialog by remember { mutableStateOf(false) }
             LaunchedEffect(key1 = refreahIndex, block = {
-                withContext(Dispatchers.IO){
+                withContext(Dispatchers.IO) {
                     historyList.clear()
                     historyList.addAll(hdao.getTop15History())
                     historyList.sortByDescending { it.searchtimes }
                     garbageHistoryList.clear()
                     historyList.map { i ->
-                        dao.getByIdChooser(i.garbageId.toString(),this@SearchActivity)
+                        dao.getByIdChooser(i.garbageId.toString(), this@SearchActivity)
                             ?.let { garbageHistoryList.add(it) }
                     }
                 }
 
             })
-            Box(modifier = Modifier.fillMaxWidth()){
+            LaunchedEffect(key1 = searchText, block = {
+                withContext(Dispatchers.IO) {
+                    if (searchText.isNotEmpty()) {
+                        val result =
+                            dao?.getGarbageListByNameChooser("%$searchText%", this@SearchActivity)
+                        searchResult.clear()
+                        if (result != null) {
+                            searchResult.addAll(result)
+                        }
+
+                    } else {
+                        searchResult = mutableStateListOf()
+                    }
+                }
+
+            })
+            Box(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier
                         .fillMaxHeight()
@@ -104,20 +120,6 @@ class SearchActivity : BaseActivity() {
                         value = searchText,
                         onValueChange = { text ->
                             searchText = text
-                            scope.launch {
-                                withContext(Dispatchers.IO) {
-                                    if (searchText.isNotEmpty()) {
-                                        val result = dao?.getGarbageListByNameChooser("%$searchText%",this@SearchActivity)
-                                        searchResult.clear()
-                                        if (result != null) {
-                                            searchResult.addAll(result)
-                                        }
-
-                                    } else {
-                                        searchResult = mutableStateListOf()
-                                    }
-                                }
-                            }
                         },
                         leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                         colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface),
@@ -139,8 +141,8 @@ class SearchActivity : BaseActivity() {
                             }
                         )
                     )
-                    if(searchText == ""){
-                        if (garbageHistoryList.size!=0){
+                    if (searchText == "") {
+                        if (garbageHistoryList.size != 0) {
                             FlowRow(modifier = Modifier.fillMaxWidth()) {
                                 repeat(garbageHistoryList.size) { index ->
 
@@ -162,10 +164,18 @@ class SearchActivity : BaseActivity() {
                                                     .padding(start = 9.dp)
                                                     .align(Alignment.CenterVertically),
                                                 color = when (garbageHistoryList[index].type) {
-                                                    resources.getString(R.string.type1) -> Color(0xFF3162A7)
-                                                    resources.getString(R.string.type2) -> Color(0xFF1C7070)
-                                                    resources.getString(R.string.type3) -> Color(0xFF56686C)
-                                                    resources.getString(R.string.type4) -> Color(0xFFA42B3E)
+                                                    resources.getString(R.string.type1) -> Color(
+                                                        0xFF3162A7
+                                                    )
+                                                    resources.getString(R.string.type2) -> Color(
+                                                        0xFF1C7070
+                                                    )
+                                                    resources.getString(R.string.type3) -> Color(
+                                                        0xFF56686C
+                                                    )
+                                                    resources.getString(R.string.type4) -> Color(
+                                                        0xFFA42B3E
+                                                    )
                                                     else -> Color.DarkGray
                                                 },
                                                 textAlign = TextAlign.Center
@@ -190,17 +200,22 @@ class SearchActivity : BaseActivity() {
                                     modifier = Modifier
                                         .wrapContentSize()
                                         .padding(horizontal = 4.dp, vertical = 5.dp)
-                                        .clickable { showDialog=true },
+                                        .clickable { showDialog = true },
                                     elevation = 8.dp,
                                     shape = RoundedCornerShape(18.dp)
 
-                                ){
+                                ) {
                                     Row {
-                                        Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.Gray, modifier = Modifier
-                                            .padding(start = 9.dp)
-                                            .align(
-                                                Alignment.CenterVertically
-                                            ))
+                                        Icon(
+                                            imageVector = Icons.Default.Delete,
+                                            contentDescription = null,
+                                            tint = Color.Gray,
+                                            modifier = Modifier
+                                                .padding(start = 9.dp)
+                                                .align(
+                                                    Alignment.CenterVertically
+                                                )
+                                        )
                                         Text(
                                             text = resources.getString(R.string.delete_history),
                                             modifier = Modifier.padding(
@@ -219,7 +234,7 @@ class SearchActivity : BaseActivity() {
                             }
                         }
 
-                    }else{
+                    } else {
                         LazyColumn {
                             items(searchResult.size) { index ->
                                 Row(
@@ -250,10 +265,18 @@ class SearchActivity : BaseActivity() {
                                                 .weight(1f)
                                                 .padding(end = 16.dp),
                                             color = when (searchResult[index].type) {
-                                                resources.getString(R.string.type1) -> Color(0xFF3162A7)
-                                                resources.getString(R.string.type2) -> Color(0xFF1C7070)
-                                                resources.getString(R.string.type3) -> Color(0xFF56686C)
-                                                resources.getString(R.string.type4) -> Color(0xFFA42B3E)
+                                                resources.getString(R.string.type1) -> Color(
+                                                    0xFF3162A7
+                                                )
+                                                resources.getString(R.string.type2) -> Color(
+                                                    0xFF1C7070
+                                                )
+                                                resources.getString(R.string.type3) -> Color(
+                                                    0xFF56686C
+                                                )
+                                                resources.getString(R.string.type4) -> Color(
+                                                    0xFFA42B3E
+                                                )
                                                 else -> Color.DarkGray
                                             }
                                         )
@@ -267,9 +290,8 @@ class SearchActivity : BaseActivity() {
                     }
 
 
-
                 }
-                if (showDialog){
+                if (showDialog) {
                     AlertDialog(onDismissRequest = { showDialog = false },
                         title = { Text(text = getString(R.string.delete_history_title)) },
                         text = { Text(text = getString(R.string.delete_history_text)) },
@@ -293,18 +315,17 @@ class SearchActivity : BaseActivity() {
             }
 
 
-
         }
 
 
     }
 
     private fun deleteHistory() {
-        lifecycleScope.launch{
-            withContext(Dispatchers.IO){
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
                 hdao.clearHistory()
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 refreahIndex++
             }
         }
@@ -314,21 +335,28 @@ class SearchActivity : BaseActivity() {
 
     private fun updateHistory(garbage: Garbage) {
         lifecycleScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 var g = hdao.getSearchHistoryByGarbageId(garbage.id.toInt())
                 if (g == null) {
-                    hdao.insertSearchHistory(SearchHistory(searchtimes = 1, time = getCurrentTimeString(), garbageId = garbage.id.toInt()))
-                }else{
+                    hdao.insertSearchHistory(
+                        SearchHistory(
+                            searchtimes = 1,
+                            time = getCurrentTimeString(),
+                            garbageId = garbage.id.toInt()
+                        )
+                    )
+                } else {
                     g.searchtimes++
                     hdao.updateSearchTimes(g)
                 }
-            withContext(Dispatchers.Main){
-                refreahIndex ++
-            }
+                withContext(Dispatchers.Main) {
+                    refreahIndex++
+                }
             }
         }
 
     }
+
     fun getCurrentTimeString(): String {
         val currentDateTime = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
