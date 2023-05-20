@@ -1,5 +1,6 @@
 package com.cqupt.garbagesorter.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -35,6 +36,22 @@ class FragmentOne : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var toolbar: Toolbar
+    private var buttonClickListener: OnButtonClickListener? = null
+
+    interface OnButtonClickListener {
+        fun onButtonClick()
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        try {
+            buttonClickListener = context as OnButtonClickListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException("$context must implement OnButtonClickListener")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -73,7 +90,6 @@ class FragmentOne : Fragment() {
         btn.setOnClickListener { startImageUploadActivity() }
 
 
-
         var editText = view.findViewById<EditText>(R.id.fragment_one_edit)
         editText.setOnClickListener { startSearchActivity() }
 
@@ -81,12 +97,13 @@ class FragmentOne : Fragment() {
     }
 
     private fun startImageUploadActivity() {
-        val intent = Intent(activity, ImageUploadActivity::class.java)
-        startActivity(intent)
+//        val intent = Intent(activity, ImageUploadActivity::class.java)
+//        startActivity(intent)
+        buttonClickListener?.onButtonClick()
     }
 
     private fun startSearchActivity() {
-        val intent = Intent(activity,SearchActivity::class.java)
+        val intent = Intent(activity, SearchActivity::class.java)
         startActivity(intent)
     }
 

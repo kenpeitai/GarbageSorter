@@ -62,7 +62,6 @@ class FragmentTwo : Fragment() {
     private lateinit var composeView: ComposeView
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -80,7 +79,8 @@ class FragmentTwo : Fragment() {
         val view = inflater.inflate(R.layout.fragment_two, container, false)
         toolbar = view.findViewById(R.id.fragment2_toolbar)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
-        (activity as AppCompatActivity).supportActionBar?.title = resources.getString(R.string.page_2)
+        (activity as AppCompatActivity).supportActionBar?.title =
+            resources.getString(R.string.page_2)
         composeView = view.findViewById(R.id.fragment2_composeView)
         val imageList = listOf(
             R.drawable.kehuishouwu_xiao,
@@ -89,7 +89,6 @@ class FragmentTwo : Fragment() {
             R.drawable.youhailaji_xiao
         )
         composeView.setContent {
-
 
 
             SetList1(imageList)
@@ -118,7 +117,7 @@ class FragmentTwo : Fragment() {
             }
         }
 
-      //  var progressVisibleTime by remember { mutableStateOf(0L) }
+        //  var progressVisibleTime by remember { mutableStateOf(0L) }
         Column {                        //总页面布局
             Column(                                               //第一列，种类选择栏
                 modifier = Modifier.height(80.dp)
@@ -175,9 +174,9 @@ class FragmentTwo : Fragment() {
             Log.d("selectedImage TAG-------->", "selectedImage:$selectedImage")
             val database = MyDatabase.getDatabase(LocalContext.current)
             val dao = database.GarbageDao()
-            LaunchedEffect(garbages, itemType,state) {  //传入的对象改变时执行语句
+            LaunchedEffect(garbages, itemType, state) {  //传入的对象改变时执行语句
                 withContext(Dispatchers.IO) {
-                    val result = dao?.getByTypeChooser(itemType,requireContext())
+                    val result = dao?.getByTypeChooser(itemType, requireContext())
                     garbages.clear()
 
                     if (result != null) {
@@ -190,7 +189,13 @@ class FragmentTwo : Fragment() {
             }
 
             Box() {
-                LazyColumn(modifier = Modifier.scrollable(rememberScrollState(),enabled = isClickable,orientation = Orientation.Vertical)) {    //第2列，具体物品
+                LazyColumn(
+                    modifier = Modifier.scrollable(
+                        rememberScrollState(),
+                        enabled = isClickable,
+                        orientation = Orientation.Vertical
+                    )
+                ) {    //第2列，具体物品
                     items(garbages.size) { index ->
 
                         Row(
@@ -268,43 +273,44 @@ class FragmentTwo : Fragment() {
                                 R.drawable.baseline_note_add_24
                             }
                             val coroutineScope = rememberCoroutineScope()
-                            Box(modifier = Modifier
-                                .fillMaxSize()
-                                .weight(0.8f)
-                                .align(Alignment.CenterVertically)
-                                .clickable(enabled = isClickable) {
-                                    showProgress = true
-                                    isClickable = false
-                                    garbages[index].likeIndex =
-                                        if (garbages[index].likeIndex == 1) 0 else 1
-                                    coroutineScope.launch {
-                                        withContext(Dispatchers.IO) {
-                                            if (dao != null) {
-                                                dao.updateGarbageLikeIndexAll(
-                                                    garbages[index].id,
-                                                    if (garbages[index].likeIndex == 1) 1 else 0
-                                                )
-                                                //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
-                                                withContext(Dispatchers.Main) {
-                                                    Toast
-                                                        .makeText(
-                                                            requireContext(),
-                                                            "success,the like_index of garbage_${garbages[index].name} is ${garbages[index].likeIndex}",
-                                                            Toast.LENGTH_SHORT
-                                                        )
-                                                        .show()
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(0.8f)
+                                    .align(Alignment.CenterVertically)
+                                    .clickable(enabled = isClickable) {
+                                        showProgress = true
+                                        isClickable = false
+                                        garbages[index].likeIndex =
+                                            if (garbages[index].likeIndex == 1) 0 else 1
+                                        coroutineScope.launch {
+                                            withContext(Dispatchers.IO) {
+                                                if (dao != null) {
+                                                    dao.updateGarbageLikeIndexAll(
+                                                        garbages[index].id,
+                                                        if (garbages[index].likeIndex == 1) 1 else 0
+                                                    )
+                                                    //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
+                                                    withContext(Dispatchers.Main) {
+                                                        Toast
+                                                            .makeText(
+                                                                requireContext(),
+                                                                "success,the like_index of garbage_${garbages[index].name} is ${garbages[index].likeIndex}",
+                                                                Toast.LENGTH_SHORT
+                                                            )
+                                                            .show()
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
 
-                                    // 1.5秒后再次启用点击
-                                    lifecycleScope.launch {
-                                        delay(1500)
-                                        isClickable = true
-                                        showProgress = false
-                                    }
-                                }, contentAlignment = Alignment.Center
+                                        // 1.5秒后再次启用点击
+                                        lifecycleScope.launch {
+                                            delay(1500)
+                                            isClickable = true
+                                            showProgress = false
+                                        }
+                                    }, contentAlignment = Alignment.Center
                             ) {
                                 Image(
                                     painter = painterResource(id = isCollected),
@@ -320,10 +326,12 @@ class FragmentTwo : Fragment() {
                     }
                 }
                 if (showProgress) {
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center)
-                        .background(Color.Gray.copy(alpha = 0.4f))) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .align(Alignment.Center)
+                            .background(Color.Gray.copy(alpha = 0.4f))
+                    ) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
 
@@ -337,7 +345,6 @@ class FragmentTwo : Fragment() {
 
 
     }
-
 
 
     companion object {

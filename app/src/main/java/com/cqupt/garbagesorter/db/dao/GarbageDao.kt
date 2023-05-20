@@ -6,13 +6,14 @@ import androidx.room.*
 import com.cqupt.garbagesorter.db.bean.Garbage
 import com.cqupt.garbagesorter.db.bean.GarbageEN
 import java.util.*
+
 /**
-*
-* 不要直接使用普通方法或EN结尾方法
+ *
+ * 不要直接使用普通方法或EN结尾方法
  ** 使用对应Chooser方法
-*
-*
-*/
+ *
+ *
+ */
 @Dao
 interface GarbageDao {
     @Query("SELECT * FROM garbage")
@@ -20,28 +21,36 @@ interface GarbageDao {
 
     @Query("SELECT * FROM garbage_en")
     fun getAllEN(): List<GarbageEN>
+
     @Transaction
-    fun getAllChooser(context: Context):List<Garbage>{
-        val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        when(language){
+    fun getAllChooser(context: Context): List<Garbage> {
+        val language = context.applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        ).getString("language", Locale.CHINA.language)
+        when (language) {
             Locale.CHINA.language -> return getAll()
-            Locale.ENGLISH.language ->return toGarbageList(getAllEN())!!
+            Locale.ENGLISH.language -> return toGarbageList(getAllEN())!!
             else -> return getAll()
         }
     }
 
     @Query("SELECT * FROM garbage WHERE like_index = :likeIndex")
-    fun getCollection(likeIndex: Int):List<Garbage>?
+    fun getCollection(likeIndex: Int): List<Garbage>?
 
     @Query("SELECT * FROM garbage_en WHERE like_index = :likeIndex")
-    fun getCollectionEN(likeIndex: Int):List<GarbageEN>?
+    fun getCollectionEN(likeIndex: Int): List<GarbageEN>?
+
     @Transaction
-    fun getCollectionChooser(likeIndex: Int,context: Context):List<Garbage>?{
-        val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        when(language){
+    fun getCollectionChooser(likeIndex: Int, context: Context): List<Garbage>? {
+        val language = context.applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        ).getString("language", Locale.CHINA.language)
+        when (language) {
             Locale.CHINA.language -> return getCollection(likeIndex)
             Locale.ENGLISH.language -> return toGarbageList(getCollectionEN(likeIndex))
-            else ->return getCollection(likeIndex)
+            else -> return getCollection(likeIndex)
         }
     }
 
@@ -52,12 +61,15 @@ interface GarbageDao {
     fun getByIdEN(id: String): GarbageEN?
 
     @Transaction
-    fun getByIdChooser(id: String,context: Context):Garbage?{
-        val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        when(language){
+    fun getByIdChooser(id: String, context: Context): Garbage? {
+        val language = context.applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        ).getString("language", Locale.CHINA.language)
+        when (language) {
             Locale.CHINA.language -> return getById(id)
             Locale.ENGLISH.language -> return toGarbage(getByIdEN(id))
-            else ->return getById(id)
+            else -> return getById(id)
         }
     }
 
@@ -66,13 +78,17 @@ interface GarbageDao {
 
     @Query("SELECT * FROM garbage_en WHERE type = :type")
     fun getByTypeEN(type: String): List<GarbageEN>?
+
     @Transaction
-    fun getByTypeChooser(type: String,context: Context): List<Garbage>?{
-        val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        when(language){
-            Locale.CHINA.language ->return getByType(type)
-            Locale.ENGLISH.language ->return toGarbageList(getByTypeEN(type))
-            else ->return getByType(type)
+    fun getByTypeChooser(type: String, context: Context): List<Garbage>? {
+        val language = context.applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        ).getString("language", Locale.CHINA.language)
+        when (language) {
+            Locale.CHINA.language -> return getByType(type)
+            Locale.ENGLISH.language -> return toGarbageList(getByTypeEN(type))
+            else -> return getByType(type)
         }
     }
 
@@ -81,9 +97,12 @@ interface GarbageDao {
 
     @Query("SELECT * FROM garbage_en WHERE type = :type LIMIT 10")
     fun getTop10ByTypeEN(type: String): List<GarbageEN>?
-    fun getTop10ByTypeChooser(type: String,context: Context):List<Garbage>?{
-        val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        when(language){
+    fun getTop10ByTypeChooser(type: String, context: Context): List<Garbage>? {
+        val language = context.applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        ).getString("language", Locale.CHINA.language)
+        when (language) {
             Locale.CHINA.language -> return getTop10ByType(type)
             Locale.ENGLISH.language -> return toGarbageList(getTop10ByTypeEN(type))
             else -> return getTop10ByType(type)
@@ -101,10 +120,14 @@ interface GarbageDao {
 
     @Query("SELECT * FROM garbage_en WHERE name LIKE '%' || :name || '%'")
     fun getGarbageListByNameEN(name: String): List<GarbageEN>
+
     @Transaction
-    fun getGarbageListByNameChooser(name: String,context: Context):List<Garbage>{
-        val language = context.applicationContext.getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE).getString("language", Locale.CHINA.language)
-        return when(language){
+    fun getGarbageListByNameChooser(name: String, context: Context): List<Garbage> {
+        val language = context.applicationContext.getSharedPreferences(
+            "MyAppPreferences",
+            Context.MODE_PRIVATE
+        ).getString("language", Locale.CHINA.language)
+        return when (language) {
             Locale.CHINA.language -> getGarbageListByName(name)
             Locale.ENGLISH.language -> toGarbageList(getGarbageListByNameEN(name))!!
             else -> getGarbageListByName(name)
@@ -117,9 +140,9 @@ interface GarbageDao {
     @Query("UPDATE garbage_en SET like_index = :likeIndex WHERE id = :id")
     suspend fun updateGarbageLikeIndexEN(id: String, likeIndex: Int)
 
-    suspend fun updateGarbageLikeIndexAll(id: String, likeIndex: Int){
-        updateGarbageLikeIndex(id,likeIndex)
-        updateGarbageLikeIndexEN(id,likeIndex)
+    suspend fun updateGarbageLikeIndexAll(id: String, likeIndex: Int) {
+        updateGarbageLikeIndex(id, likeIndex)
+        updateGarbageLikeIndexEN(id, likeIndex)
     }
 
     @Delete
@@ -134,16 +157,31 @@ interface GarbageDao {
     @Update
     suspend fun updateGarbageEN(garbage: GarbageEN)
 
-    fun toGarbage(en: GarbageEN?):Garbage? {
+    fun toGarbage(en: GarbageEN?): Garbage? {
         if (en != null) {
-            return Garbage(id = en.id_en, type = en.type_en, name = en.name_en, description = en.description_en, likeIndex = en.likeIndex_en, img = null)
-        }else{
+            return Garbage(
+                id = en.id_en,
+                type = en.type_en,
+                name = en.name_en,
+                description = en.description_en,
+                likeIndex = en.likeIndex_en,
+                img = null
+            )
+        } else {
             return null
         }
     }
+
     fun toGarbageList(enList: List<GarbageEN>?): List<Garbage>? {
         return enList?.map { en ->
-            Garbage(id = en.id_en, type = en.type_en, name = en.name_en, description = en.description_en, likeIndex = en.likeIndex_en, img = null)
+            Garbage(
+                id = en.id_en,
+                type = en.type_en,
+                name = en.name_en,
+                description = en.description_en,
+                likeIndex = en.likeIndex_en,
+                img = null
+            )
         }
     }
 }

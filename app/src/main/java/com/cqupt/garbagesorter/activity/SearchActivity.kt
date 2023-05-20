@@ -49,6 +49,7 @@ class SearchActivity : BaseActivity() {
     lateinit var dao: GarbageDao
     lateinit var hdao: HistoryDao
     private var refreahIndex = 0
+    private var searchIndex = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -94,7 +95,7 @@ class SearchActivity : BaseActivity() {
                 }
 
             })
-            LaunchedEffect(key1 = searchText, block = {
+            LaunchedEffect(key1 = searchIndex,key2 = refreahIndex, block = {
                 withContext(Dispatchers.IO) {
                     if (searchText.isNotEmpty()) {
                         val result =
@@ -120,6 +121,7 @@ class SearchActivity : BaseActivity() {
                         value = searchText,
                         onValueChange = { text ->
                             searchText = text
+                            searchIndex++
                         },
                         leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null) },
                         colors = TextFieldDefaults.textFieldColors(backgroundColor = MaterialTheme.colors.surface),
@@ -152,6 +154,7 @@ class SearchActivity : BaseActivity() {
                                             .padding(horizontal = 4.dp, vertical = 5.dp)
                                             .clickable {
                                                 searchText = garbageHistoryList[index].name!!
+                                                refreahIndex++
                                             },
                                         elevation = 8.dp,
                                         shape = RoundedCornerShape(18.dp)

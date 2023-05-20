@@ -37,7 +37,7 @@ import java.util.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
-class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallbacks{
+open class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallbacks{
     private val PICK_IMAGE = 1
     private val TAKE_PHOTO = 2
     private lateinit var photoFile1:File
@@ -77,7 +77,7 @@ class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallbacks{
         }
     }
 
-    private fun check1(context: Context) {
+    protected fun check1(context: Context) {
         val perms = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE)
         if (EasyPermissions.hasPermissions(context, *perms)) {
             // 已有权限，可以执行操作
@@ -105,7 +105,7 @@ class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallbacks{
                     null
                 }
                 photoFile1 = photoFile!!
-                Log.d("createImageFile()--------------------->", "openImageChooser: ${photoFile}+${photoFile!!.path}")
+           //     Log.d("createImageFile()--------------------->", "openImageChooser: ${photoFile}+${photoFile!!.path}")
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
                         this,

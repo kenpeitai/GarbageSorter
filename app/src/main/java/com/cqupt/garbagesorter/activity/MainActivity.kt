@@ -56,7 +56,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  * #                                                   #
 */
 
-class MainActivity : BaseActivity() {
+class MainActivity : ImageUploadActivity(),FragmentOne.OnButtonClickListener {
     private lateinit var viewPager: ViewPager
     private lateinit var bottomNavView: BottomNavigationView
 
@@ -199,5 +199,9 @@ class MainActivity : BaseActivity() {
                 // Ignore
             }
         })
+    }
+
+    override fun onButtonClick() {
+        check1(this)
     }
 }
