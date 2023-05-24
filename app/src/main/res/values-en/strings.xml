@@ -75,5 +75,8 @@ If it is volatile, please seal it and put it in</string>
     <string name="image_chooser">Select opening method</string>
     <string name="recognize_result">Recognition Result</string>
     <string name="predict_text">The type of prediction is：</string>
+    <string name="delete_collection">Delete item</string>
+    <string name="reco_result_btn">Show Detail</string>
+    <string name="report">Report Error</string>
 
 </resources>

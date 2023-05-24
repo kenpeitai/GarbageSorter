@@ -13,19 +13,25 @@ import java.nio.ByteOrder
 import java.nio.charset.Charset
 
 class ImagePredictor (private val context: Context){
+    companion object {
+        private const val IMAGE_SIZE = 224 // 图像的宽度和高度
+        private const val IMAGE_MEAN = 127.5f // 在预处理中，从像素值中减去的平均值
+        private const val IMAGE_STD = 127.5f // 在预处理中，像素值除以的标准差
+        private const val NUM_CLASSES = 158 // 模型预测的类别数
+    }
+    
     fun predict(bitmap: Bitmap): Int? {
         val modelFile = FileUtil.loadMappedFile(context, "ResNet50.tflite")
         val tflite = Interpreter(modelFile)
-        val IMAGE_SIZE = 224 // 图像的宽度和高度
-        val IMAGE_MEAN = 127.5f // 在预处理中，从像素值中减去的平均值
-        val IMAGE_STD = 127.5f // 在预处理中，像素值除以的标准差
-        val NUM_CLASSES = 158 // 模型预测的类别数
+
         var mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        val imgData = ByteBuffer.allocateDirect(1 * IMAGE_SIZE * IMAGE_SIZE * 3 * 4)
+        val imgData = ByteBuffer.allocateDirect(1 * Companion.IMAGE_SIZE * Companion.IMAGE_SIZE * 3 * 4)
         imgData.order(ByteOrder.nativeOrder())
         val intValues = IntArray(mutableBitmap.width * mutableBitmap.height)
         //将图像缩放为
-        mutableBitmap = Bitmap.createScaledBitmap(mutableBitmap, IMAGE_SIZE, IMAGE_SIZE, false)
+        mutableBitmap = Bitmap.createScaledBitmap(mutableBitmap,
+            IMAGE_SIZE,
+            IMAGE_SIZE, false)
         //val intValues = IntArray(IMAGE_SIZE * IMAGE_SIZE)
         mutableBitmap.getPixels(
             intValues,
@@ -94,5 +100,7 @@ class ImagePredictor (private val context: Context){
         }
         return id
     }
+
+
 
 }

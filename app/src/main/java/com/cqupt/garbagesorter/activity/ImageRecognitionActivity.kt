@@ -48,7 +48,9 @@ class ImageRecognitionActivity : BaseActivity() {
     lateinit var dao: GarbageDao
     lateinit var imagePredictor: ImagePredictor
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalCoilApi::class,
+        ExperimentalLayoutApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var imageUri = intent.getStringExtra("imageUri")!!
@@ -77,7 +79,7 @@ class ImageRecognitionActivity : BaseActivity() {
                 ) {
                     Column {
                         TopAppBar(title = {
-                            Text(text = getString(R.string.recognize_result))
+                            Text(text = resources.getString(R.string.recognize_result))
 
                         }, navigationIcon = {
                             Icon(imageVector = Icons.Default.Menu, contentDescription = null)
@@ -87,7 +89,7 @@ class ImageRecognitionActivity : BaseActivity() {
 
 
                         Image(
-                            bitmap = onWaitngBitmap!!.asImageBitmap(),
+                            bitmap = onWaitngBitmap.asImageBitmap(),
                             //         painter = imagePainter,
                             contentDescription = null,
                             modifier = Modifier
@@ -104,16 +106,16 @@ class ImageRecognitionActivity : BaseActivity() {
                                 garbage = dao.getByIdChooser(resultId, localContext)
                             }
                         })
-                        Row(modifier = Modifier.padding(vertical = 10.dp)) {
+                        FlowRow(modifier = Modifier.padding(vertical = 10.dp)) {
                             Text(
                                 text = getString(R.string.predict_text) + garbage?.type + "--" + garbage?.name,
                                 modifier = Modifier
                                     .padding(horizontal = 10.dp)
                                     .align(alignment = Alignment.CenterVertically), fontSize = 18.sp
                             )
-                            Button(onClick = { garbage?.let { startInfoActivity(it.id) } }) {
+                            Button(modifier = Modifier.padding(10.dp),onClick = { garbage?.let { startInfoActivity(it.id) } }) {
                                 Row() {
-                                    Text(text = "查看详细", modifier = Modifier.align(Alignment.CenterVertically))
+                                    Text(text = getString(R.string.reco_result_btn), modifier = Modifier.align(Alignment.CenterVertically))
                                     Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = null)
                                 }
 

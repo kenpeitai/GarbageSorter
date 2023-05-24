@@ -1,5 +1,6 @@
 package com.cqupt.garbagesorter.fragment
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.Image
@@ -31,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -65,6 +71,7 @@ class FragmentThree : Fragment() {
     private lateinit var toolbar: Toolbar
     private lateinit var composeView: ComposeView
     private lateinit var database: MyDatabase
+    private lateinit var sendEmailLauncher: ManagedActivityResultLauncher<Intent, ActivityResult>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -96,12 +103,27 @@ class FragmentThree : Fragment() {
     @OptIn(ExperimentalMaterialApi::class)
     @Composable
     private fun SetComposeView() {
-         database = MyDatabase.getDatabase(LocalContext.current)
+
+        database = MyDatabase.getDatabase(LocalContext.current)
         var garbages = remember { mutableStateListOf<Garbage>() }
         var count by remember { mutableStateOf(0) }
         var showProgress by remember { mutableStateOf(false) }
         var showDialog by remember { mutableStateOf(false) }
         var currentItem by remember { mutableStateOf(-1) }
+         sendEmailLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Toast.makeText(requireContext(),getString(com.google.android.material.R.string.abc_action_mode_done),Toast.LENGTH_SHORT).show()
+                // 邮件发送成功
+                // 这里可以添加成功后的逻辑处理
+            } else {
+                // 邮件发送失败或取消发送
+                // 这里可以添加失败或取消后的逻辑处理
+
+            }
+        }
+
         LaunchedEffect(key1 = garbages, key2 = count, block = {
             withContext(Dispatchers.IO) {
 
@@ -252,7 +274,7 @@ class FragmentThree : Fragment() {
                                                                 Share(garbages[index])
                                                             }
 
-                                                            2 -> {}
+                                                            2 -> {SendEmail(garbages[index])}
                                                             else -> {}
                                                         }
                                                     }) {
@@ -329,8 +351,13 @@ class FragmentThree : Fragment() {
                 }
                 if (showDialog) {
                     AlertDialog(onDismissRequest = { showDialog = false },
-                        title = { Text(text = "Dialog Title") },
-                        text = { Text(text = "Dialog Message") },
+                        title = { Text(text = stringResource(R.string.delete_collection)) },
+                        text = { Text(text = stringResource(id = R.string.delete_history_text)) },
+                        dismissButton = {
+                                  TextButton(onClick = { showDialog = false}) {
+                                      Text(text = getString(com.google.android.material.R.string.mtrl_picker_cancel))
+                                  }
+                        },
                         confirmButton = {
                             TextButton(onClick = {
                                 showDialog = false
@@ -352,7 +379,7 @@ class FragmentThree : Fragment() {
 
                                 }
                             }) {
-                                Text(text = "OK")
+                                Text(text = getString(com.google.android.material.R.string.mtrl_picker_confirm))
                             }
                         }
                     )
@@ -361,6 +388,33 @@ class FragmentThree : Fragment() {
                 }
             }
         }
+    }
+
+
+    private fun SendEmail(garbage: Garbage) {
+        var name = "a" + garbage.id + "_1"
+        var drawableId = requireContext().resources.getIdentifier(
+            name,
+            "drawable",
+            requireContext().packageName
+        )
+        val inputStream = resources.openRawResource(drawableId)
+        val imageFile = File(requireContext().cacheDir, name)
+        imageFile.outputStream().use { out ->
+            inputStream.copyTo(out)
+        }
+        val imageUri = Uri.parse("android.resource://${requireContext().packageName}/$drawableId")
+
+        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("2443595035@qq.com"))
+            putExtra(Intent.EXTRA_SUBJECT, "邮件主题:报错")
+            putExtra(Intent.EXTRA_TEXT, "${garbage.name}, id: ${garbage.id}, type${garbage.type}")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            putExtra(Intent.EXTRA_STREAM,imageUri)
+        }
+
+        sendEmailLauncher.launch(emailIntent)
     }
 
     private fun Share(garbage: Garbage) {
@@ -387,6 +441,7 @@ class FragmentThree : Fragment() {
             )
             putExtra(Intent.EXTRA_STREAM, imageUri)
             type = "image/jpeg"
+
         }
         val shareIntent = Intent.createChooser(sendIntent, "分享到...")
         startActivity(shareIntent)

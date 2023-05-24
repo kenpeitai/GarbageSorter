@@ -4,6 +4,7 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.locale.LocaleManager
@@ -92,12 +94,13 @@ class FragmentFour : Fragment() {
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_public_24),
                                 contentDescription = "",
-                                modifier = Modifier.padding(start = 15.dp)
+                                modifier = Modifier.padding(start = 30.dp)
                             )
                             Text(
                                 text = resources.getString(R.string.set_language),
-                                modifier = Modifier.padding(start = 10.dp),
-                                style = MaterialTheme.typography.h6
+                                modifier = Modifier.fillMaxWidth().padding(end = 30.dp),
+                                style = MaterialTheme.typography.h6,
+                                textAlign = TextAlign.Right
                             )
                         }
                         Divider(
@@ -105,6 +108,28 @@ class FragmentFour : Fragment() {
                             color = Color.Gray,
                             thickness = 0.5.dp
                         )
+                        Row(modifier = Modifier.fillMaxWidth().clickable {
+                           SendEmail()
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_report_problem_24),
+                                contentDescription = "",
+                                modifier = Modifier.padding(start = 30.dp)
+                            )
+                            Text(
+                                text = resources.getString(R.string.report),
+                                modifier = Modifier.fillMaxWidth().padding(end = 30.dp),
+                                style = MaterialTheme.typography.h6,
+                                textAlign = TextAlign.Right
+                            )
+                        }
+                        Divider(
+                            modifier = Modifier.padding(vertical = 8.dp),
+                            color = Color.Gray,
+                            thickness = 0.5.dp
+                        )
+
+
 
                     }
                     if (showDialog) {
@@ -170,6 +195,16 @@ class FragmentFour : Fragment() {
 
             }
         }
+    }
+
+    private fun SendEmail() {
+        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("2443595035@qq.com"))
+            putExtra(Intent.EXTRA_SUBJECT, "邮件主题:报错")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(emailIntent)
     }
 
     private fun setAppLocale(value: Locale) {

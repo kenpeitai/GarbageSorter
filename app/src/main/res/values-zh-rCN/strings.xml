@@ -75,4 +75,7 @@
     <string name="image_chooser">选择打开方式</string>
     <string name="recognize_result">识别结果</string>
     <string name="predict_text">预测结果为：</string>
+    <string name="delete_collection">删除收藏</string>
+    <string name="reco_result_btn">查看详细</string>
+    <string name="report">错误报告</string>
 </resources>
