@@ -44,7 +44,7 @@ If it is volatile, please seal it and put it in</string>
     <string name="garbageinfoactivity_text4">Add to collection</string>
     <string name="garbageinfoactivity_bartitle">Search Results</string>
     <string name="deatil_des11">Refers to suitable for recycling and resource utilization of household waste. Recyclables mainly include: waste paper, waste plastic bottles, waste metals, waste packaging, waste textiles, waste electrical and electronic products, waste glass, waste paper-plastic-aluminum composite packaging, etc.</string>
-    <string name="detail_des12">Cast lightly \\n clean and dry, avoid pollution \\n waste paper as flat as possible \\n three-dimensional packaging, please empty the contents, clean and flatten put \\n sharp edges, should be wrapped and put</string>
+    <string name="detail_des12">Cast lightly \n clean and dry, avoid pollution \n waste paper as flat as possible \n three-dimensional packaging, please empty the contents, clean and flatten put \n sharp edges, should be wrapped and put</string>
     <string name="detail_des21">Dry garbage is other garbage, refers to other domestic waste in addition to recyclable waste, hazardous waste, wet waste</string>
     <string name="detail_des22">Drain as much water as possible Difficult to identify the type of household waste into the dry garbage container</string>
     <string name="detail_des31">It refers to the waste that causes direct or potential harm to human health or natural environment living. Common hazardous waste includes waste lamps, waste paint, pesticides, waste cosmetics, expired drugs, waste batteries, waste light bulbs, waste water silver thermometers, etc. Hazardous waste needs to be disposed of safely in accordance with special and correct methods.</string>
@@ -78,5 +78,9 @@ If it is volatile, please seal it and put it in</string>
     <string name="delete_collection">Delete item</string>
     <string name="reco_result_btn">Show Detail</string>
     <string name="report">Report Error</string>
+    <string name="fg_toast">success</string>
+    <string name="img_up_choose">choose a image</string>
+    <string name="img_up_require_permission">The app requires the camera and read access to external storage to upload images</string>
+    <string name="search_no_results">no matching results</string>
 
 </resources>

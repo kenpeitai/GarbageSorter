@@ -27,7 +27,8 @@
                 android:name=".activity.ImageRecognitionActivity"
                 android:exported="false"
                 android:label="@string/title_activity_image_recognition"
-                android:theme="@style/Theme.GarbageSorter" />
+                android:theme="@style/Theme.GarbageSorter"
+                android:screenOrientation="portrait"/>
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -84,24 +85,25 @@
                 android:name=".GarbageInfoActivity"
                 android:exported="false"
                 android:label="@string/title_activity_garbage_info"
-                android:theme="@style/Theme.GarbageSorter" />
-        <activity
-                android:name=".activity.MainActivity2"
-                android:exported="false"
-                android:label="@string/title_activity_main2"
-                android:theme="@style/Theme.GarbageSorter" />
+                android:theme="@style/Theme.GarbageSorter"
+                android:screenOrientation="portrait"/>
+
         <activity
                 android:name=".activity.GarbageInfoActivity"
-                android:exported="false" />
+                android:exported="false"
+                android:screenOrientation="portrait"/>
         <activity
                 android:name=".activity.SearchActivity"
-                android:exported="false" />
+                android:exported="false"
+                android:screenOrientation="portrait"/>
         <activity
                 android:name=".activity.DetailActivity"
-                android:exported="true" />
+                android:exported="true"
+                android:screenOrientation="portrait"/>
         <activity
                 android:name=".activity.WelcomeActivity"
-                android:exported="true">
+                android:exported="true"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -112,7 +114,8 @@
                 android:name=".activity.MainActivity"
                 android:exported="true"
                 android:label="@string/title_activity_main"
-                android:theme="@style/Theme.GarbageSorter" />
+                android:theme="@style/Theme.GarbageSorter"
+                android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -86,13 +86,13 @@
     <string name="garbageinfoactivity_text4">添加至收藏</string>
     <string name="garbageinfoactivity_bartitle">搜索结果</string>
     <string name="deatil_des11">指适宜回收利用和资源化利用的生活废弃物。可回收物主要包括：废纸、废弃塑料瓶、废金属、废包装物、废旧纺织物、废弃电器电子产品、废玻璃、废纸塑铝复合包装等</string>
-    <string name="detail_des12">轻投轻放\\n清洁干燥，避免污染\\n废纸尽量平整\\n立体包装物请清空内容物，清洁后压扁投放\\n有尖锐边角的，应包裹后投放</string>
+    <string name="detail_des12">轻投轻放\n清洁干燥，避免污染\n废纸尽量平整\n立体包装物请清空内容物，清洁后压扁投放\n有尖锐边角的，应包裹后投放</string>
     <string name="detail_des21">干垃圾即其它垃圾，指除可回收垃圾、有害垃圾、湿垃圾以外的其它生活废弃物</string>
-    <string name="detail_des22">尽量沥干水分\\n难以辨识类别的生活垃圾投入干垃圾容器内</string>
+    <string name="detail_des22">尽量沥干水分\n难以辨识类别的生活垃圾投入干垃圾容器内</string>
     <string name="detail_des31">指对人体健康或者自然环境造成直接或者潜在危害生活的废弃物。常见的有害垃圾包括废灯管、废油漆、杀虫剂、废弃化妆品、过期药品、废电池、废灯泡、废水银温度计等，有害垃圾需按照特殊正确的方法安全处理。</string>
-    <string name="detail_des32">投放时请注意轻放\\n易破损的请连带包装或包裹后轻放\\n如易挥发，请密封后投放</string>
+    <string name="detail_des32">投放时请注意轻放\n易破损的请连带包装或包裹后轻放\n如易挥发，请密封后投放</string>
     <string name="detail_des41">易腐垃圾（餐厨垃圾），也可称湿垃圾，一般是指餐饮经营者、单位食堂等生产过程中产生的餐厨废弃物，以及家庭生活中产生的易腐性垃圾，主要包括：剩菜剩饭、菜梗菜叶、肉食内脏、果壳瓜皮等等。</string>
-    <string name="detail_des42">纯流质的食物垃圾，如牛奶等，应直接倒进下水口\\n有包装物的湿垃圾应将包装物去除后分类投放，包装物请投放到对应的可回收物或干垃圾容器</string>
+    <string name="detail_des42">纯流质的食物垃圾，如牛奶等，应直接倒进下水口\n有包装物的湿垃圾应将包装物去除后分类投放，包装物请投放到对应的可回收物或干垃圾容器</string>
     <string name="detail_text1">▋ 定义</string>
     <string name="detail_text2">▋ 投放要求</string>
     <string name="detail_text3">▋ 常见垃圾</string>
@@ -122,6 +122,10 @@
     <string name="delete_collection">删除收藏</string>
     <string name="reco_result_btn">查看详细</string>
     <string name="report">错误报告</string>
+    <string name="fg_toast">操作成功</string>
+    <string name="img_up_choose">选择图片</string>
+    <string name="img_up_require_permission">应用需要相机和读取外部存储权限来上传图片</string>
+    <string name="search_no_results">没有匹配的结果</string>
 
 
 </resources>

@@ -90,7 +90,7 @@ class FragmentOne : Fragment() {
         btn.setOnClickListener { startImageUploadActivity() }
 
 
-        var editText = view.findViewById<EditText>(R.id.fragment_one_edit)
+        var editText = view.findViewById<TextView>(R.id.fragment_one_edit)
         editText.setOnClickListener { startSearchActivity() }
 
         return view

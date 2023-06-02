@@ -2,6 +2,7 @@ package com.cqupt.garbagesorter.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -66,9 +67,9 @@ class GarbageInfoActivity : BaseActivity() {
                     )
                 )
             }
-            LaunchedEffect(garbage,garbage.likeIndex) {
+            LaunchedEffect(garbage, garbage.likeIndex) {
                 withContext(Dispatchers.IO) {
-                    garbage = id?.let { dao.getByIdChooser(it,this@GarbageInfoActivity) }!!
+                    garbage = id?.let { dao.getByIdChooser(it, this@GarbageInfoActivity) }!!
                 }
 
             }
@@ -76,7 +77,10 @@ class GarbageInfoActivity : BaseActivity() {
 
             GarbageSorterTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
                     InitView(garbage)
                 }
             }
@@ -86,11 +90,11 @@ class GarbageInfoActivity : BaseActivity() {
 
     @Composable
     private fun InitView(garbage: Garbage) {
-       var showDialog by remember { mutableStateOf(false) }
+        var showDialog by remember { mutableStateOf(false) }
         var currentItem by remember { mutableStateOf(-1) }
         Box() {
             Column() {
-                SetBar()
+                SetBar(garbage)
                 Spacer(modifier = Modifier.heightIn(20.dp))
                 SetTitleAndType(garbage)
 
@@ -112,7 +116,10 @@ class GarbageInfoActivity : BaseActivity() {
                     "drawable",
                     LocalContext.current.packageName
                 )
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
 
                     Image(
                         painter = painterResource(id = drawableId1),           //展示一张图片
@@ -168,13 +175,13 @@ class GarbageInfoActivity : BaseActivity() {
             if (showDialog) {
                 Dialog(onDismissRequest = { showDialog = false }) {
                     Box() {
-                    ImageWithZoomableBackground(painterResource(id = currentItem))
+                        ImageWithZoomableBackground(painterResource(id = currentItem))
                     }
                 }
             }
 
         }
-        
+
 
     }
 
@@ -189,7 +196,7 @@ class GarbageInfoActivity : BaseActivity() {
         }
         val tip = when (garbage.type) {
             resources.getString(R.string.type1) -> resources.getString(R.string.type11)
-            resources.getString(R.string.type2)  -> resources.getString(R.string.type22)
+            resources.getString(R.string.type2) -> resources.getString(R.string.type22)
             resources.getString(R.string.type3) -> resources.getString(R.string.type33)
             resources.getString(R.string.type4) -> resources.getString(R.string.type44)
             else -> ""
@@ -230,7 +237,7 @@ class GarbageInfoActivity : BaseActivity() {
     private fun SetTitleAndType(garbage: Garbage) {
         val imageId = when (garbage.type) {
             resources.getString(R.string.type1) -> R.drawable.kehuishouwu_xiao
-            resources.getString(R.string.type2)-> R.drawable.chuyulaji_xiao
+            resources.getString(R.string.type2) -> R.drawable.chuyulaji_xiao
             resources.getString(R.string.type3) -> R.drawable.qitalaji_xiao
             resources.getString(R.string.type4) -> R.drawable.youhailaji_xiao
             else -> R.drawable.kehuishouwu_xiao
@@ -265,7 +272,11 @@ class GarbageInfoActivity : BaseActivity() {
             Button(
                 onClick = {
                     if (garbage.likeIndex == 1) {
-                        Toast.makeText(context, resources.getString(R.string.garbageinfoactivity_text2), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            resources.getString(R.string.garbageinfoactivity_text2),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         coroutineScope.launch {
                             withContext(Dispatchers.IO) {
@@ -297,7 +308,7 @@ class GarbageInfoActivity : BaseActivity() {
                         contentDescription = null,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
-                    Text(text =  resources.getString(R.string.garbageinfoactivity_text4))
+                    Text(text = resources.getString(R.string.garbageinfoactivity_text4))
                 }
 
             }
@@ -305,7 +316,6 @@ class GarbageInfoActivity : BaseActivity() {
         }
 
     }
-
 
 
     @Composable
@@ -320,7 +330,7 @@ class GarbageInfoActivity : BaseActivity() {
             targetValue = 1f,
             animationSpec = tween(durationMillis = 1000),
 
-        )
+            )
 
         Box(
             modifier = modifier
@@ -335,34 +345,55 @@ class GarbageInfoActivity : BaseActivity() {
                     .aspectRatio(1f)
                     .scale(scale.value)
             )
-            Text(text = resources.getString(R.string.garbageinfoactivity_image_hint), modifier =Modifier.align(
-                Alignment.BottomCenter) )
+            Text(
+                text = resources.getString(R.string.garbageinfoactivity_image_hint),
+                modifier = Modifier.align(
+                    Alignment.BottomCenter
+                )
+            )
 
         }
     }
 
 
-
-
-
-
-
-
-
-    @Preview
     @Composable
-    private fun SetBar() {
+    private fun SetBar(garbage: Garbage) {
         TopAppBar(
             title = {
-                Text(text =  resources.getString(R.string.garbageinfoactivity_bartitle), color = Color.White)
+                Text(
+                    text = resources.getString(R.string.garbageinfoactivity_bartitle),
+                    color = Color.White
+                )
             },
             navigationIcon = {
                 IconButton(onClick = { onBackPressed() }) {
                     Icon(Icons.Filled.ArrowBack, "Back")
                 }
             },
-            backgroundColor = MaterialTheme.colors.secondary
+            backgroundColor = MaterialTheme.colors.secondary,
+            actions = {
+                IconButton(onClick = { sendEmail(garbage) }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_report_problem_24),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.padding(end = 20.dp)
+                    )
+
+                }
+            }
         )
+    }
+
+    private fun sendEmail(garbage: Garbage) {
+        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:")
+            putExtra(Intent.EXTRA_EMAIL, arrayOf("2443595035@qq.com"))
+            putExtra(Intent.EXTRA_SUBJECT, "邮件主题:报错")
+            putExtra(Intent.EXTRA_TEXT, "${garbage.name}, id: ${garbage.id}, type${garbage.type}")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(emailIntent)
     }
 
     override fun onBackPressed() {

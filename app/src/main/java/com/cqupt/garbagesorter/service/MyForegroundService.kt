@@ -14,6 +14,7 @@ import com.cqupt.garbagesorter.R
 import com.cqupt.garbagesorter.activity.SearchActivity
 
 class MyForegroundService : Service() {
+    private lateinit var intent: Intent
     private val NOTIFICATION_ID = 1001 // 通知的唯一标识符
     private var isRemove = false //是否需要移除
 
@@ -34,7 +35,7 @@ class MyForegroundService : Service() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun getPendingIntent(): PendingIntent {
         // 点击通知栏时打开 SearchActivity
-        val intent = Intent(this, SearchActivity::class.java)
+         intent = Intent(this, SearchActivity::class.java)
         return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
@@ -67,7 +68,7 @@ class MyForegroundService : Service() {
             .setContentText(resources.getString(R.string.service_text))
             .setAutoCancel(false)
             .setOngoing(true)
-            .setSmallIcon(R.drawable.baseline_search_24)
+            .setSmallIcon(R.drawable.ic_launcher_foreground,1)
             .setContentIntent(getPendingIntent())
             .build()
         // 将服务设置为前台服务

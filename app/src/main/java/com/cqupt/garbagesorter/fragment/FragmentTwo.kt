@@ -32,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.provider.FontsContractCompat.Columns.RESULT_CODE
 import androidx.core.provider.FontsContractCompat.FontRequestCallback.RESULT_OK
@@ -291,16 +292,17 @@ class FragmentTwo : Fragment() {
                                                         if (garbages[index].likeIndex == 1) 1 else 0
                                                     )
                                                     //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
-                                                    withContext(Dispatchers.Main) {
-                                                        Toast
-                                                            .makeText(
-                                                                requireContext(),
-                                                                "success,the like_index of garbage_${garbages[index].name} is ${garbages[index].likeIndex}",
-                                                                Toast.LENGTH_SHORT
-                                                            )
-                                                            .show()
-                                                    }
+
                                                 }
+                                            }
+                                            withContext(Dispatchers.Main) {
+                                                Toast
+                                                    .makeText(
+                                                        requireContext(),
+                                                        getString(R.string.fg_toast),
+                                                        Toast.LENGTH_SHORT
+                                                    )
+                                                    .show()
                                             }
                                         }
 

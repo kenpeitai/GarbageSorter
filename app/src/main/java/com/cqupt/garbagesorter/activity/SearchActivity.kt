@@ -238,58 +238,79 @@ class SearchActivity : BaseActivity() {
                         }
 
                     } else {
-                        LazyColumn {
-                            items(searchResult.size) { index ->
-                                Row(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(16.dp)
-                                        .clickable {
-                                            val intent =
-                                                Intent(context, GarbageInfoActivity::class.java)
-                                            intent.putExtra("EXTRA_GARBAGE", searchResult[index].id)
-                                            startActivity(intent)
-                                            updateHistory(searchResult[index])
-                                        }
-                                ) {
-                                    searchResult[index].name?.let {
-                                        Text(
-                                            text = it,
-                                            modifier = Modifier
-                                                .weight(1f)
-                                                .padding(start = 16.dp)
-                                        )
-                                    }
-                                    searchResult[index].type?.let {
-                                        Text(
-                                            text = it,
-                                            textAlign = TextAlign.End,
-                                            modifier = Modifier
-                                                .weight(1f)
-                                                .padding(end = 16.dp),
-                                            color = when (searchResult[index].type) {
-                                                resources.getString(R.string.type1) -> Color(
-                                                    0xFF3162A7
-                                                )
-                                                resources.getString(R.string.type2) -> Color(
-                                                    0xFF1C7070
-                                                )
-                                                resources.getString(R.string.type3) -> Color(
-                                                    0xFF56686C
-                                                )
-                                                resources.getString(R.string.type4) -> Color(
-                                                    0xFFA42B3E
-                                                )
-                                                else -> Color.DarkGray
-                                            }
-                                        )
-                                    }
+                        if (searchResult.size == 0) {
+                            Column() {
+                                Row(modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)) {
+                                    Text(
+                                        text = getString(R.string.search_no_results),
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
 
-                                }
+                            }
                                 Divider(color = Color.Gray, thickness = 1.dp)
 
                             }
+                        }else{
+                            LazyColumn {
+                                items(searchResult.size) { index ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp)
+                                            .clickable {
+                                                val intent =
+                                                    Intent(context, GarbageInfoActivity::class.java)
+                                                intent.putExtra(
+                                                    "EXTRA_GARBAGE",
+                                                    searchResult[index].id
+                                                )
+                                                startActivity(intent)
+                                                updateHistory(searchResult[index])
+                                            }
+                                    ) {
+                                        searchResult[index].name?.let {
+                                            Text(
+                                                text = it,
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(start = 16.dp)
+                                            )
+                                        }
+                                        searchResult[index].type?.let {
+                                            Text(
+                                                text = it,
+                                                textAlign = TextAlign.End,
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(end = 16.dp),
+                                                color = when (searchResult[index].type) {
+                                                    resources.getString(R.string.type1) -> Color(
+                                                        0xFF3162A7
+                                                    )
+                                                    resources.getString(R.string.type2) -> Color(
+                                                        0xFF1C7070
+                                                    )
+                                                    resources.getString(R.string.type3) -> Color(
+                                                        0xFF56686C
+                                                    )
+                                                    resources.getString(R.string.type4) -> Color(
+                                                        0xFFA42B3E
+                                                    )
+                                                    else -> Color.DarkGray
+                                                }
+                                            )
+                                        }
+
+                                    }
+                                    Divider(color = Color.Gray, thickness = 1.dp)
+
+                                }
+                            }
                         }
+
                     }
 
 
@@ -302,6 +323,9 @@ class SearchActivity : BaseActivity() {
                             TextButton(onClick = {
                                 showDialog = false
                                 deleteHistory()
+
+                                garbageHistoryList.clear()
+                          //      refreahIndex++
                             }) {
                                 Text(text = getString(com.google.android.material.R.string.mtrl_picker_confirm))
                             }
@@ -328,9 +352,7 @@ class SearchActivity : BaseActivity() {
             withContext(Dispatchers.IO) {
                 hdao.clearHistory()
             }
-            withContext(Dispatchers.Main) {
-                refreahIndex++
-            }
+
         }
 
 

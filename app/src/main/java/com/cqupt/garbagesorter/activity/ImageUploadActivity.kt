@@ -60,7 +60,7 @@ open class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallba
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(onClick = { check1(context) }) {
-                    Text("选择图片")
+                    Text(getString(R.string.img_up_choose))
                 }
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -87,7 +87,7 @@ open class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallba
             // 没有权限，请求权限
             EasyPermissions.requestPermissions(
                 this,
-                "应用需要相机和读取外部存储权限来上传图片",
+                getString(R.string.img_up_require_permission),
                 RC_CAMERA_AND_STORAGE,
                 *perms
             )
