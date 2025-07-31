@@ -198,7 +198,7 @@ class FragmentTwo : Fragment() {
                     )
                 ) {    //第2列，具体物品
                     items(garbages.size) { index ->
-
+                        val garbage = garbages.getOrNull(index) ?: return@items
                         Row(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp, vertical = 1.dp)
@@ -211,13 +211,13 @@ class FragmentTwo : Fragment() {
                                 .fillMaxWidth()
                                 .clickable {
                                     val intent = Intent(context, GarbageInfoActivity::class.java)
-                                    intent.putExtra("EXTRA_GARBAGE", garbages[index].id)
+                                    intent.putExtra("EXTRA_GARBAGE", garbage.id)
                                     launcher.launch(intent)
 
                                 },
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            var name = "a" + garbages[index].id + "_0"
+                            var name = "a" + garbage.id + "_0"
                             var drawableId = requireContext().resources.getIdentifier(
                                 name,
                                 "drawable",
@@ -245,7 +245,7 @@ class FragmentTwo : Fragment() {
                                     .weight(4.2f)
                                     .align(Alignment.CenterVertically)
                             ) {
-                                garbages[index].name?.let {
+                                garbage.name?.let {
                                     Text(
                                         text = it,
                                         style = MaterialTheme.typography.subtitle1.copy(
@@ -259,7 +259,7 @@ class FragmentTwo : Fragment() {
                                     modifier = Modifier.fillMaxHeight(),
                                     verticalArrangement = Arrangement.Center
                                 ) {
-                                    garbages[index].description?.let {
+                                    garbage.description?.let {
                                         Text(                                                        //描述
                                             text = it,
                                             style = MaterialTheme.typography.subtitle2
@@ -268,7 +268,7 @@ class FragmentTwo : Fragment() {
                                 }
 
                             }
-                            isCollected = if (garbages[index].likeIndex == 1) {
+                            isCollected = if (garbage.likeIndex == 1) {
                                 R.drawable.baseline_check_circle_24
                             } else {
                                 R.drawable.baseline_note_add_24
@@ -282,14 +282,14 @@ class FragmentTwo : Fragment() {
                                     .clickable(enabled = isClickable) {
                                         showProgress = true
                                         isClickable = false
-                                        garbages[index].likeIndex =
-                                            if (garbages[index].likeIndex == 1) 0 else 1
+                                        garbage.likeIndex =
+                                            if (garbage.likeIndex == 1) 0 else 1
                                         coroutineScope.launch {
                                             withContext(Dispatchers.IO) {
                                                 if (dao != null) {
                                                     dao.updateGarbageLikeIndexAll(
-                                                        garbages[index].id,
-                                                        if (garbages[index].likeIndex == 1) 1 else 0
+                                                        garbage.id,
+                                                        if (garbage.likeIndex == 1) 1 else 0
                                                     )
                                                     //   Log.d("TAG likeIndex ******:", "value: ${dao.getById(garbages[index].id)?.likeIndex}")
 

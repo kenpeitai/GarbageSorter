@@ -47,9 +47,7 @@
                 android:exported="false"
                 android:label="@string/title_activity_image_upload"
                 android:theme="@style/Theme.GarbageSorter" />
-        <activity
-                android:name=".BaseActivity"
-                android:exported="false" />
+
 
         <service
                 android:name=".service.MyForegroundService"
@@ -68,12 +66,12 @@
                     android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-                android:name=".GarbageInfoActivity"
-                android:exported="false"
-                android:label="@string/title_activity_garbage_info"
-                android:theme="@style/Theme.GarbageSorter"
-                android:screenOrientation="portrait"/>
+<!--        <activity-->
+<!--                android:name=".GarbageInfoActivity"-->
+<!--                android:exported="false"-->
+<!--                android:label="@string/title_activity_garbage_info"-->
+<!--                android:theme="@style/Theme.GarbageSorter"-->
+<!--                android:screenOrientation="portrait"/>-->
 
         <activity
                 android:name=".activity.GarbageInfoActivity"
