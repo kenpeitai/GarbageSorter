@@ -1,4 +1,5 @@
 package com.cqupt.garbagesorter.activity
+
 import android.Manifest
 import android.app.Activity
 import android.content.Context
@@ -10,6 +11,8 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalContext
@@ -37,19 +40,42 @@ import java.util.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
-open class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallbacks{
+open class ImageUploadActivity : BaseActivity(), EasyPermissions.PermissionCallbacks {
     private val PICK_IMAGE = 1
     private val TAKE_PHOTO = 2
-    private lateinit var photoFile1:File
+    private lateinit var photoFile1: File
+
+    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
 
     // 用于存储选取的图片的 Uri
     private var imageUri: MutableState<Uri?> = mutableStateOf(null)
+
     companion object {
         const val RC_CAMERA_AND_STORAGE = 123
     }
 
     @OptIn(ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        pickImageLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                val data: Intent? = result.data
+                val selectedImageUri = data?.data
+                if (result.resultCode == Activity.RESULT_OK) {
+
+                    if (selectedImageUri == null) {
+                        imageUri.value = FileProvider.getUriForFile(
+                            this,
+                            "com.cqupt.garbagesorter.fileprovider",
+                            photoFile1
+                        )
+                    }
+                } else {
+                    imageUri.value = selectedImageUri
+                }
+                imageUri.value?.let {
+                    startRecognitionActivity(it)
+                }
+            }
         super.onCreate(savedInstanceState)
         setContent {
             val context = LocalContext.current
@@ -83,7 +109,7 @@ open class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallba
             // 已有权限，可以执行操作
             // ...
             openImageChooser()
-        }else {
+        } else {
             // 没有权限，请求权限
             EasyPermissions.requestPermissions(
                 this,
@@ -95,75 +121,94 @@ open class ImageUploadActivity : BaseActivity(),EasyPermissions.PermissionCallba
     }
 
     private fun openImageChooser() {
-        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePhotoIntent ->
-            takePhotoIntent.addCategory(Intent.CATEGORY_DEFAULT)
-            takePhotoIntent.resolveActivity(packageManager)?.also {
-                val photoFile: File? = try {
-                    createImageFile()
+        val takePhotoIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePhotoIntent.addCategory(Intent.CATEGORY_DEFAULT)
 
-                } catch (ex: IOException) {
-                    null
-                }
-                photoFile1 = photoFile!!
-           //     Log.d("createImageFile()--------------------->", "openImageChooser: ${photoFile}+${photoFile!!.path}")
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "com.cqupt.garbagesorter.fileprovider",
-                        it
-                    )
-                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                }
+        // 创建文件用于拍照输出
+        val photoFile: File? = try {
+            createImageFile()
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+            null
+        }
+
+        photoFile?.let { file ->
+            photoFile1 = file
+            val photoURI: Uri = FileProvider.getUriForFile(
+                this,
+                "com.cqupt.garbagesorter.fileprovider",
+                file
+            )
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+
+            // 确保有拍照 app 可用
+            if (takePhotoIntent.resolveActivity(packageManager) != null) {
+                val pickPhotoIntent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+
+                val chooserIntent = Intent.createChooser(
+                    pickPhotoIntent,
+                    getString(R.string.image_chooser) // 如“选择图片来源”
+                )
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent))
+
+                pickImageLauncher.launch(chooserIntent)
             }
         }
-        val pickPhotoFromGalleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-
-        val intentChooser = Intent.createChooser(pickPhotoFromGalleryIntent, getString(R.string.image_chooser))
-        intentChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(takePhotoIntent))
-        startActivityForResult(intentChooser, PICK_IMAGE)
     }
+
 
 
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir: File? = getExternalFilesDir(Environment.getExternalStorageState())
         if (storageDir != null) {
-            if(!storageDir.exists()){
+            if (!storageDir.exists()) {
 
                 storageDir.mkdir();
 
             }
         }
-        return File.createTempFile("JPEG_${timeStamp}_",
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
             ".jpg",
             storageDir
         )
             .apply {
-         //   imageUri.value = Uri.fromFile(this)
-        }
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            val selectedImageUri: Uri? = data?.data
-            if (selectedImageUri == null) {
-                imageUri.value = FileProvider.getUriForFile(this,"com.cqupt.garbagesorter.fileprovider",photoFile1)
-                startRecognitionActivity(imageUri.value!!)
-            } else {
-                imageUri.value = selectedImageUri // handle the case of image picked from gallery
-                startRecognitionActivity(imageUri.value!!)
+                //   imageUri.value = Uri.fromFile(this)
             }
-        }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+//            val selectedImageUri: Uri? = data?.data
+//            if (selectedImageUri == null) {
+//                imageUri.value = FileProvider.getUriForFile(
+//                    this,
+//                    "com.cqupt.garbagesorter.fileprovider",
+//                    photoFile1
+//                )
+//                startRecognitionActivity(imageUri.value!!)
+//            } else {
+//                imageUri.value = selectedImageUri // handle the case of image picked from gallery
+//                startRecognitionActivity(imageUri.value!!)
+//            }
+//        }
+//    }
 
     private fun startRecognitionActivity(value: Uri) {
-        intent=Intent(this,ImageRecognitionActivity::class.java)
-        intent.putExtra("imageUri",value.toString())
+        intent = Intent(this, ImageRecognitionActivity::class.java)
+        intent.putExtra("imageUri", value.toString())
         startActivity(intent)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         // 把结果转发到EasyPermissions

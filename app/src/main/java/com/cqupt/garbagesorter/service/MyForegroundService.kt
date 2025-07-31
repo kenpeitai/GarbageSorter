@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -32,11 +33,17 @@ class MyForegroundService : Service() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun getPendingIntent(): PendingIntent {
-        // 点击通知栏时打开 SearchActivity
-         intent = Intent(this, SearchActivity::class.java)
-        return PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val intent = Intent(this, SearchActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+
+        return PendingIntent.getActivity(this, 0, intent, flags)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -72,7 +79,13 @@ class MyForegroundService : Service() {
             .setContentIntent(getPendingIntent())
             .build()
         // 将服务设置为前台服务
-        startForeground(NOTIFICATION_ID, notification)    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
+        }else{
+            startForeground(NOTIFICATION_ID, notification)
+        }
+
+    }
 
     override fun onDestroy() {
         if (isRemove) {

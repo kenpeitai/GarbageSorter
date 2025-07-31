@@ -1,32 +1,25 @@
 pluginManagement {
+    plugins {
+        id("com.android.application") version '8.11.1'
+    }
     repositories {
-
-        gradlePluginPortal()
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://jitpack.io' }
         google()
+        gradlePluginPortal()
+
         mavenCentral()
 
     }
+
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+
+        google()
         gradlePluginPortal()
 
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://jitpack.io' }
-        google()
         mavenCentral()
-
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "Garbage Sorter"
