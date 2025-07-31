@@ -87,12 +87,6 @@ External API Layer (TensorFlow Lite)
 - Converted to `.tflite` for mobile inference
 - Optimized using GlobalAveragePooling and softmax classification
 
-## 📈 Future Work
-
-- Improve recognition in poor lighting
-- Add iOS & web versions
-- Enable user personalization / learning
-- Expand dataset to support region-specific classifications
 
 ## 📜 License
 
