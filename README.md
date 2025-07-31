@@ -56,15 +56,15 @@ External API Layer (TensorFlow Lite)
 ### Prerequisites
 
 - Android Studio (Giraffe or later)
-- Kotlin 1.8+
+- Kotlin 2.0+
 - Gradle 8.x
-- Android device (API Level 26+, ARM64 recommended)
+- Android device (API Level 31+, ARM64 recommended)
 
 ### Build & Run
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your_username/garbage-sorting-app.git
+   git clone https://github.com/kenpeitai/GarbageSorter.git
    ```
 
 2. Open in Android Studio and sync Gradle.
@@ -101,6 +101,6 @@ For academic use only. Contact the author for collaboration or reuse.
 
 ## 🙏 Acknowledgements
 
-- Supervisor: 陈吕洋 工程师  
+- Supervisor: Lvyaang Chen， engineer，CQUPT  
 - Project conducted under the Software Engineering Department, Class of 2019  
 - Thanks to all testers and peers who provided feedback
