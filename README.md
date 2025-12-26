@@ -95,6 +95,4 @@ For academic use only. Contact the author for collaboration or reuse.
 
 ## 🙏 Acknowledgements
 
-- Supervisor: Lvyaang Chen， engineer，CQUPT  
-- Project conducted under the Software Engineering Department, Class of 2019  
-- Thanks to all testers and peers who provided feedback
+- **HIDE**
